@@ -16,22 +16,10 @@ module CMAPI
       @port = (secure ? DEFAULT_SECURE_PORT : DEFAULT_PORT) if port.nil?
     end
 
-    def get(url, **params)
-      @last_response = connection.get(url, params)
-      @last_response.body
-    end
-
     private
 
     def valid_host?
       @host&.strip.present?
-    end
-
-    def connection
-      @connection ||= Faraday.new(host) do |conn|
-        conn.request(:cm_api_request)
-        conn.adapter(Faraday.default_adapter)
-      end
     end
   end
 end

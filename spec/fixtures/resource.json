@@ -1,0 +1,11 @@
+{
+  "object": {
+    "id": 1,
+    "name": "My Object",
+    "keys": ["Key1", "Key2", "Key3"],
+    "tags": [
+      { "label": "Tag 1", "name": "tag_1", "children": [1, 2, 3] },
+      { "label": "Tag 2", "name": "tag_2", "children": [4, 5, 6] }
+    ]
+  }
+}
