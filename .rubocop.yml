@@ -1,0 +1,24 @@
+---
+AllCops:
+  Exclude:
+    - "tmp/**/*"
+    - "vendor/**/*"
+
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
+
+Style/Documentation:
+  Enabled: false
+
+Style/ClassAndModuleChildren:
+  EnforcedStyle: nested
+
+Style/SingleLineBlockParams:
+  Enabled: false
+
+Metrics/LineLength:
+  Max: 120
+
+Metrics/ClassLength:
+  Exclude:
+    - spec/**/*_spec.rb
