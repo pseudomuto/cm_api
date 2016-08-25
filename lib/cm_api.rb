@@ -10,5 +10,6 @@ module CMAPI
   autoload :Refinements, "cm_api/refinements"
   autoload :Resource, "cm_api/resource"
 
-  Faraday::Request.register_middleware(cm_api_request: -> { Middleware::Request })
+  Faraday::Request.register_middleware(cmapi_request: -> { Middleware::Request })
+  Faraday::Response.register_middleware(cmapi_response: -> { Middleware::Response })
 end

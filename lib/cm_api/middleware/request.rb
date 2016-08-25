@@ -11,6 +11,8 @@ module CMAPI
       def call(request)
         headers = request.fetch(:request_headers)
         headers["Content-Type"] = "application/json"
+
+        @app.call(request)
       end
     end
   end
