@@ -1,5 +1,8 @@
 # Cloudera Manager API (cm_api) Ruby Client
 
+[![Build Status](https://travis-ci.org/pseudomuto/cm_api.svg?branch=master)](https://travis-ci.org/pseudomuto/cm_api)
+[![Coverage Status](https://coveralls.io/repos/github/pseudomuto/cm_api/badge.svg?branch=master)](https://coveralls.io/github/pseudomuto/cm_api?branch=master)
+
 Work in progress...don't even try it out just yet.
 
 ## Installation
