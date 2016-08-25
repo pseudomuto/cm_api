@@ -6,6 +6,7 @@ gemspec
 
 group :development, :test do
   gem "bundler", "~> 1.12"
+  gem "coveralls", "~> 0.8", require: false
   gem "rake", "~> 10.0"
   gem "rspec", "~> 3.0"
   gem "rubocop", "~> 0.42"

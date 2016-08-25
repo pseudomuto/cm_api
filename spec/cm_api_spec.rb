@@ -2,6 +2,6 @@
 
 describe CMAPI do
   it "has a version number" do
-    expect(CMAPI::VERSION).not_to be nil
+    expect(CMAPI::VERSION).to_not be_nil
   end
 end
