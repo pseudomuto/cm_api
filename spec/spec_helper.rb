@@ -6,4 +6,5 @@ Coveralls.noisy = true
 Coveralls.wear!
 
 require "cm_api"
+require "webmock/rspec"
 Dir["./spec/support/**/*.rb"].each { |f| require f }

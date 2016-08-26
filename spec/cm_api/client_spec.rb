@@ -33,4 +33,26 @@ describe CMAPI::Client do
       end
     end
   end
+
+  describe "#get" do
+    let(:client) { described_class.new(host: "cloudera-test.com") }
+
+    it "gets the specified resource" do
+      request = stub_request(:get, "http://cloudera-test.com:7180/api/v13/tools/echo").to_return(
+        body: '{ "message": "" }'
+      )
+
+      client.get("/tools/echo")
+      expect(request).to have_been_requested
+    end
+
+    it "adds params as query string params" do
+      request = stub_request(:get, "http://cloudera-test.com:7180/api/v13/tools/echo?message=test").to_return(
+        body: '{ "message": "test" }'
+      )
+
+      client.get("/tools/echo", message: "test")
+      expect(request).to have_been_requested
+    end
+  end
 end

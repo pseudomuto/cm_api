@@ -9,7 +9,7 @@ module CMAPI
           class_eval do
             define_method(attr) { _attributes[attr] }
             define_method("#{attr}=") { |value| _attributes[attr] = value }
-            define_method("#{attr}?") { !!_attributes[attr] } # rubocop:disable Style/DoubleNegation
+            define_method("#{attr}?") { !!_attributes[attr] }
           end
         end
       end
