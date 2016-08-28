@@ -3,9 +3,11 @@ module CMAPI
   class Client
     using Refinements
 
-    autoload :Tools, "cm_api/client/tools"
+    require "cm_api/client/tools"
+    require "cm_api/client/users"
 
     include Tools
+    include Users
 
     DEFAULT_PORT        = 7180
     DEFAULT_SECURE_PORT = 7183
