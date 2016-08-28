@@ -3,20 +3,26 @@ module CMAPI
   class Client
     using Refinements
 
+    autoload :Tools, "cm_api/client/tools"
+
+    include Tools
+
     DEFAULT_PORT        = 7180
     DEFAULT_SECURE_PORT = 7183
 
-    attr_reader :host, :port, :version
+    attr_reader :host, :version
+    attr_accessor :port, :https
+
     attr_reader :last_response
 
-    def initialize(host:, port: nil, version: "v13", secure: false)
+    def initialize(host:, user: "admin", pass: "admin", version: "v13")
       @host = host
       raise InvalidHostError, "'#{host}' is not a valid host" unless valid_host?
 
-      @port    = port
-      @port    = (secure ? DEFAULT_SECURE_PORT : DEFAULT_PORT) if port.nil?
+      @port    = DEFAULT_PORT
+      @user    = user
+      @pass    = pass
       @version = version
-      @secure  = secure
     end
 
     def get(path, **params)
@@ -28,6 +34,7 @@ module CMAPI
 
     def connection
       @connection ||= Faraday.new(base_url) do |conn|
+        conn.request(:basic_auth, @user, @pass)
         conn.request(:cmapi_request)
         conn.response(:cmapi_response)
         conn.adapter(Faraday.default_adapter)
@@ -51,7 +58,7 @@ module CMAPI
     end
 
     def secure?
-      !!@secure
+      !!https
     end
   end
 end

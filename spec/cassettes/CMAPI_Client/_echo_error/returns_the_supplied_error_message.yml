@@ -1,0 +1,45 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: http://localhost:7180/api/v13/tools/echoError?message=Some%20error%20message
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.9.2
+      Authorization:
+      - Basic YWRtaW46YWRtaW4=
+      Content-Type:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 500
+      message: Internal Server Error
+    headers:
+      Expires:
+      - Thu, 01-Jan-1970 00:00:00 GMT
+      Set-Cookie:
+      - CLOUDERA_MANAGER_SESSIONID=ssj9gfsweimkrxf9w7cng11;Path=/;HttpOnly
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Sun, 28 Aug 2016 04:17:10 GMT
+      Transfer-Encoding:
+      - chunked
+      Server:
+      - Jetty(6.1.26.cloudera.4)
+    body:
+      encoding: UTF-8
+      string: |-
+        {
+          "message" : "Some error message"
+        }
+    http_version: 
+  recorded_at: Sun, 28 Aug 2016 04:17:10 GMT
+recorded_with: VCR 3.0.3
