@@ -19,4 +19,4 @@ VCR.configure do |c|
 end
 
 # docker exposes default port
-APIClient = CMAPI::Client.new(host: "localhost")
+APIClient = CMAPI::Client.new(host: "localhost", user: "cloudera", pass: "cloudera")
