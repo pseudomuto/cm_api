@@ -1,5 +1,29 @@
 # frozen_string_literal: true
 module CMAPI
+  # A container class for all responses
+  #
+  # This class will convert json responses into objects that respond to methods with the same name as the JSON
+  # properties returned.
+  #
+  # @example
+  #   # a simple json object
+  #   resource = Resource.new('{"message": "value"}')
+  #   resource.message #=> "value"
+  #
+  # @example
+  #   # a json object with nested properties
+  #   json = <<-EOF
+  #   {
+  #     "items": [
+  #       { "name": "test", "values": [1, 2, 3], "child": { "key": "value" } }
+  #     ]
+  #   }
+  #   EOF
+  #
+  #   resource = Resource.new(JSON.parse(json))
+  #   resource.items.size              #=> 1
+  #   resource.items.first.values.last #=> 3
+  #   resource.items.first.child.key   #=> "value"
   class Resource
     class << self
       private
@@ -15,6 +39,9 @@ module CMAPI
       end
     end
 
+    # Creates a new resource
+    #
+    # @param json [Hash] a json object
     def initialize(json)
       json.each { |key, value| _attributes[key] = parse_attribute(value) }
 

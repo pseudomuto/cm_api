@@ -1,6 +1,32 @@
 # frozen_string_literal: true
 module CMAPI
+  # The main entry point for this gem. The client represents a single "session" with the API.
+  #
+  # @example
+  #   api      = CMAPI::Client.new(host: "YOUR_HOST")
+  #   resource = api.echo("test message")
+  #
+  #   resource.message #=> "test message"
+  #
+  # @example supplying custom user, pass and version
+  #   api      = CMAPI::Client.new(host: "YOUR_HOST", user: "admin", pass: "admin", version: "v13")
+  #   resource = api.echo("test message")
+  #
+  #   resource.message #=> "test message"
+  #
+  # @example using HTTPS on a custom port
+  #   api       = CMAPI::Client.new(host: "YOUR_HOST", user: "admin", pass: "admin", version: "v13")
+  #   api.https = true
+  #   api.port  = 7183
+  #
+  #   resource = api.echo("test message")
+  #   resource.message #=> "test message"
   class Client
+    DEFAULT_USER    = "admin"
+    DEFAULT_PASS    = "admin"
+    DEFAULT_PORT    = 7180
+    DEFAULT_VERSION = "v13"
+
     using Refinements
 
     require "cm_api/client/tools"
@@ -9,15 +35,30 @@ module CMAPI
     include Tools
     include Users
 
-    DEFAULT_PORT        = 7180
-    DEFAULT_SECURE_PORT = 7183
+    # @return [String] the API host name
+    attr_reader :host
 
-    attr_reader :host, :version
-    attr_accessor :port, :https
+    # @return [String] the API version
+    attr_reader :version
 
+    # @return [Integer] the API port
+    attr_accessor :port
+
+    # @return [Boolean] whether or not to use https
+    attr_accessor :https
+
+    # Provides access to the last API response.
+    # @return [Faraday::Response, nil] the response from the last request (if any)
     attr_reader :last_response
 
-    def initialize(host:, user: "admin", pass: "admin", version: "v13")
+    # Initialize a new API client.
+    # @raise [InvalidHostError] when the host name is invalid
+    #
+    # @param host [String] the hostname (without the port)
+    # @param user [String] the user to connect as
+    # @param pass [String] the password for the user
+    # @param version [String] the API version to use
+    def initialize(host:, user: DEFAULT_USER, pass: DEFAULT_PASS, version: DEFAULT_VERSION)
       @host = host
       raise InvalidHostError, "'#{host}' is not a valid host" unless valid_host?
 
@@ -27,6 +68,18 @@ module CMAPI
       @version = version
     end
 
+    # Make a get request to the API.
+    #
+    # @param path [String] the path to the resource (not including /api/{version})
+    # @param params [Hash] query string parameters to be passed
+    # @return [Resource] the parsed resource from the response
+    #
+    # @example
+    #   client   = CMAPI::Client.new(host: "myhost.com")
+    #   resource = client.get("/tools/echoError", message: "my error message")
+    #
+    #   # fetched http://myhost.com:7180/api/v13/tools/echoError?message=my%20error%20message
+    #   resource.message #=> "my error message"
     def get(path, **params)
       @last_response = connection.get(normalize_path(path), params)
       @last_response.body

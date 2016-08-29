@@ -12,4 +12,5 @@ group :development, :test do
   gem "rubocop", "~> 0.42"
   gem "vcr", "~> 3.0"
   gem "webmock", "~> 2.0"
+  gem "yard", "~> 0.9"
 end

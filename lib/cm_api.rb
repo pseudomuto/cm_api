@@ -2,6 +2,7 @@
 require "faraday"
 
 module CMAPI
+  # An error that's raised when the host is not valid
   InvalidHostError = Class.new(StandardError)
 
   autoload :VERSION, "cm_api/version"
