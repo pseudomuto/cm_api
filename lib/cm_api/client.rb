@@ -100,7 +100,7 @@ module CMAPI
 
     def normalize_path(path)
       path = "/#{path}" unless path.start_with?("/")
-      "/api/#{version}#{path}"
+      URI.encode("/api/#{version}#{path}")
     end
 
     def base_url

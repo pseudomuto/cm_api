@@ -12,6 +12,15 @@ module CMAPI
       def list_clusters(view: "summary")
         get("/clusters", view: view)
       end
+
+      # Get cluster details
+      # @see x
+      #
+      # @param name [String] the name of the cluster
+      # @return [Resource] the cluster resource
+      def cluster(name:)
+        get("/clusters/#{name}")
+      end
     end
   end
 end
