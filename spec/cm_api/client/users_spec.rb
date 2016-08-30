@@ -3,7 +3,8 @@ describe CMAPI::Client, :vcr do
   describe "#users" do
     it "lists users" do
       users = APIClient.users
-      expect(APIClient.last_response.status).to eq(200)
+      expect(api_request("/users")).to have_been_made
+      expect(last_response.status).to eq(200)
       expect(users.items).to be_kind_of(Array)
     end
   end
@@ -11,7 +12,8 @@ describe CMAPI::Client, :vcr do
   describe "#user" do
     it "shows user details" do
       user = APIClient.user(username: "admin")
-      expect(APIClient.last_response.status).to eq(200)
+      expect(api_request("/users/admin")).to have_been_made
+      expect(last_response.status).to eq(200)
       expect(user.name).to eq("admin")
       expect(user.roles).to include("ROLE_ADMIN")
     end
@@ -20,7 +22,8 @@ describe CMAPI::Client, :vcr do
   describe "#user_sessions" do
     it "lists user sessions" do
       sessions = APIClient.user_sessions
-      expect(APIClient.last_response.status).to eq(200)
+      expect(api_request("/users/sessions")).to have_been_made
+      expect(last_response.status).to eq(200)
       expect(sessions.items).to be_kind_of(Array)
     end
   end

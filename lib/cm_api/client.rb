@@ -29,9 +29,11 @@ module CMAPI
 
     using Refinements
 
+    require "cm_api/client/clusters"
     require "cm_api/client/tools"
     require "cm_api/client/users"
 
+    include Clusters
     include Tools
     include Users
 

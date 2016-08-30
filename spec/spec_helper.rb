@@ -17,6 +17,3 @@ VCR.configure do |c|
   c.configure_rspec_metadata!
   c.hook_into(:webmock)
 end
-
-# docker exposes default port
-APIClient = CMAPI::Client.new(host: "localhost", user: "cloudera", pass: "cloudera")
