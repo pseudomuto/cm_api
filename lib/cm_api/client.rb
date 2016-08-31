@@ -87,6 +87,24 @@ module CMAPI
       @last_response.body
     end
 
+    # Make a post request to the API.
+    #
+    # @param path [String] the path to the resource (not including /api/{version})
+    # @param body [Hash] the optional request body to send
+    # @return [Resource] the parsed resource from the response
+    #
+    # @example
+    #   client = CMAPI::Client.new(host: "myhost.com")
+    #   resource = client.post("/clusters", body: { name: "New Cluster", full_version: "5.8.1")
+    #
+    #   resource.name #=> "New Cluster"
+    def post(path, body: nil)
+      body ||= {}
+
+      @last_response = connection.post(normalize_path(path), JSON.generate(body))
+      @last_response.body
+    end
+
     private
 
     def connection

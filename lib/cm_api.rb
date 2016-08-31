@@ -5,6 +5,9 @@ module CMAPI
   # An error that's raised when the host is not valid
   InvalidHostError = Class.new(StandardError)
 
+  # An error that's raised when the version of CDH is not valid
+  InvalidCDHVersionError = Class.new(StandardError)
+
   autoload :VERSION, "cm_api/version"
   autoload :Client, "cm_api/client"
   autoload :Middleware, "cm_api/middleware"

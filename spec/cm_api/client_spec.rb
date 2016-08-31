@@ -36,4 +36,27 @@ describe CMAPI::Client do
       expect(request).to have_been_requested
     end
   end
+
+  describe "#post" do
+    let(:client) { described_class.new(host: "cloudera-test.com") }
+
+    it "posts to the specified resource" do
+      request = stub_request(:post, "http://cloudera-test.com:7180/api/v13/post_test").to_return(
+        body: '{ "items": [] }'
+      )
+
+      client.post("/post_test")
+      expect(request).to have_been_requested
+    end
+
+    it "sends the body along with the request when supplied" do
+      body    = { test: "value" }
+      request = stub_request(:post, "http://cloudera-test.com:7180/api/v13/post_test")
+                .with { |req| req.body == JSON.generate(body) }
+                .to_return(body: '{ "items": [] }')
+
+      client.post("/post_test", body: body)
+      expect(request).to have_been_requested
+    end
+  end
 end

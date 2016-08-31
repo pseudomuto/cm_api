@@ -35,4 +35,30 @@ describe CMAPI::Client, :vcr do
       expect(response.items[0].displayName).to eq("Cloudera QuickStart")
     end
   end
+
+  describe "#create_cluster" do
+    context "when operation is successful" do
+      it "creates the new cluster and returns the resource" do
+        response = APIClient.create_cluster(name: "New Cluster", full_version: "5.8.1")
+        expect(api_request("/clusters", method: :post)).to have_been_made
+        expect(last_response.status).to eq(200)
+        expect(response.name).to eq("New Cluster")
+      end
+    end
+
+    context "when neither version nor full_version are supplied" do
+      it "raises an InvalidCDHVersionError" do
+        expect { APIClient.create_cluster(name: "My Cluster") }.to raise_error(CMAPI::InvalidCDHVersionError)
+      end
+    end
+
+    context "when the operation fails" do
+      it "returns the error resource" do
+        response = APIClient.create_cluster(name: nil, full_version: "5.8.1") # name already exists
+        expect(api_request("/clusters", method: :post)).to have_been_made
+        expect(last_response.status).to eq(400)
+        expect(response.message).to_not be_empty
+      end
+    end
+  end
 end
