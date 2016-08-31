@@ -1,0 +1,103 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: http://localhost:7180/api/v13/clusters
+    body:
+      encoding: UTF-8
+      string: '{"items":[{"name":"To Be Deleted","version":null,"fullVersion":"5.8.1"}]}'
+    headers:
+      User-Agent:
+      - Faraday v0.9.2
+      Authorization:
+      - Basic Y2xvdWRlcmE6Y2xvdWRlcmE=
+      Content-Type:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Expires:
+      - Thu, 01-Jan-1970 00:00:00 GMT
+      Set-Cookie:
+      - CLOUDERA_MANAGER_SESSIONID=1mh23e1ab4m7k1jlbubar5og7x;Path=/;HttpOnly
+      Content-Type:
+      - application/json
+      Date:
+      - Tue, 30 Aug 2016 00:53:59 GMT
+      Transfer-Encoding:
+      - chunked
+      Server:
+      - Jetty(6.1.26.cloudera.4)
+    body:
+      encoding: UTF-8
+      string: |-
+        {
+          "items" : [ {
+            "name" : "To Be Deleted",
+            "displayName" : "To Be Deleted",
+            "version" : "CDH5",
+            "fullVersion" : "5.8.1",
+            "maintenanceMode" : false,
+            "maintenanceOwners" : [ ],
+            "clusterUrl" : "http://quickstart.cloudera:7180/cmf/clusterRedirect/To+Be+Deleted",
+            "hostsUrl" : "http://quickstart.cloudera:7180/cmf/clusterRedirect/To+Be+Deleted/hosts"
+          } ]
+        }
+    http_version: 
+  recorded_at: Wed, 31 Aug 2016 03:15:48 GMT
+- request:
+    method: delete
+    uri: http://localhost:7180/api/v13/clusters/To%20Be%20Deleted
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.9.2
+      Authorization:
+      - Basic Y2xvdWRlcmE6Y2xvdWRlcmE=
+      Content-Type:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Expires:
+      - Thu, 01-Jan-1970 00:00:00 GMT
+      Set-Cookie:
+      - CLOUDERA_MANAGER_SESSIONID=l7yj160u3kk7h4qinphf91hy;Path=/;HttpOnly
+      Content-Type:
+      - application/json
+      Date:
+      - Tue, 30 Aug 2016 00:53:59 GMT
+      Transfer-Encoding:
+      - chunked
+      Server:
+      - Jetty(6.1.26.cloudera.4)
+    body:
+      encoding: UTF-8
+      string: |-
+        {
+          "name" : "To Be Deleted",
+          "displayName" : "To Be Deleted",
+          "version" : "CDH5",
+          "fullVersion" : "5.8.1",
+          "maintenanceMode" : false,
+          "maintenanceOwners" : [ ],
+          "clusterUrl" : "http://quickstart.cloudera:7180/cmf/clusterRedirect/To+Be+Deleted",
+          "hostsUrl" : "http://quickstart.cloudera:7180/cmf/clusterRedirect/To+Be+Deleted/hosts"
+        }
+    http_version: 
+  recorded_at: Wed, 31 Aug 2016 03:15:48 GMT
+recorded_with: VCR 3.0.3

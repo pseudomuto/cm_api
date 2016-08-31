@@ -105,6 +105,22 @@ module CMAPI
       @last_response.body
     end
 
+    # Make a delete request to the API.
+    #
+    # @param path [String] the path to the resource (not including /api/{version})
+    # @param params [Hash] query string parameters to be passed
+    # @return [Resource] the deleted resource parsed from the response
+    #
+    # @example
+    #   client = CMAPI::Client.new(host: "myhost.com")
+    #   resource = client.delete("/clusters/someCluster")
+    #
+    #   resource.name #=> "someCluster"
+    def delete(path, **params)
+      @last_response = connection.delete(normalize_path(path), params)
+      @last_response.body
+    end
+
     private
 
     def connection

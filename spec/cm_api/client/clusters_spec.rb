@@ -61,4 +61,25 @@ describe CMAPI::Client, :vcr do
       end
     end
   end
+
+  describe "#delete_cluster" do
+    context "when the cluster exists" do
+      it "deletes the cluster" do
+        APIClient.create_cluster(name: "To Be Deleted", full_version: "5.8.1")
+        expect(last_response.status).to eq(200)
+
+        response = APIClient.delete_cluster(name: "To Be Deleted")
+        expect(last_response.status).to eq(200)
+        expect(response.name).to eq("To Be Deleted")
+      end
+    end
+
+    context "when the cluster is not found" do
+      it "returns an appropriate error resource" do
+        response = APIClient.delete_cluster(name: "unknown cluster")
+        expect(last_response.status).to eq(404)
+        expect(response.message).to_not be_empty
+      end
+    end
+  end
 end

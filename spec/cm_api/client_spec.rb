@@ -59,4 +59,26 @@ describe CMAPI::Client do
       expect(request).to have_been_requested
     end
   end
+
+  describe "#delete" do
+    let(:client) { described_class.new(host: "cloudera-test.com") }
+
+    it "deletes the specified resource" do
+      request = stub_request(:delete, "http://cloudera-test.com:7180/api/v13/clusters/test").to_return(
+        body: '{ "name": "test" }'
+      )
+
+      client.delete("/clusters/test")
+      expect(request).to have_been_requested
+    end
+
+    it "adds params as query string params" do
+      request = stub_request(:delete, "http://cloudera-test.com:7180/api/v13/clusters/test?value=1").to_return(
+        body: '{ "name": "test" }'
+      )
+
+      client.delete("/clusters/test", value: 1)
+      expect(request).to have_been_requested
+    end
+  end
 end

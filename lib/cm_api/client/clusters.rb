@@ -44,6 +44,15 @@ module CMAPI
         resource.respond_to?(:items) ? resource.items.first : resource
       end
 
+      # Deletes the specified cluster
+      # @see http://cloudera.github.io/cm_api/apidocs/v13/path__clusters_-clusterName-.html
+      #
+      # @param name [String] the name of the cluster to delete
+      # @return [Resource] the deleted cluster
+      def delete_cluster(name:)
+        delete("/clusters/#{name}")
+      end
+
       private
 
       def ensure_valid_version!(version:, full_version:)
