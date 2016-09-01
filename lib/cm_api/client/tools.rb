@@ -7,7 +7,7 @@ module CMAPI
       # @see http://cloudera.github.io/cm_api/apidocs/v13/path__tools_echo.html
       #
       # @param message [String]
-      # @return [Resource] the original message
+      # @return [Resources::Base] the original message
       def echo(message:)
         get("/tools/echo", message: message)
       end
@@ -16,7 +16,7 @@ module CMAPI
       # @see http://cloudera.github.io/cm_api/apidocs/v13/path__tools_echoError.html
       #
       # @param message [String] the message to echo
-      # @return [Resource] the original message and list of causes
+      # @return [Resources::Base] the original message and list of causes
       def echo_error(message:)
         get("/tools/echoError", message: message)
       end
