@@ -11,10 +11,10 @@ module CMAPI
 
       # Gets a single user
       #
-      # @param username [String] the user to lookup
+      # @param name [String] the user to lookup
       # @returns [Resource] the user
-      def user(username:)
-        get("/users/#{username}")
+      def user(name:)
+        get("/users/#{name}")
       end
 
       # Creates a new user
@@ -28,6 +28,14 @@ module CMAPI
 
         resource = post("/users", body: { items: [body] })
         resource.is_a?(Array) ? resource.first : resource
+      end
+
+      # Deletes the specified user from CDM
+      #
+      # @param name [String] the user to delete
+      # @return [Resources::Base] the deleted user
+      def delete_user(name:)
+        delete("/users/#{name}")
       end
 
       # Looks up current user sessions

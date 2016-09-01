@@ -12,7 +12,7 @@ describe CMAPI::Client, :vcr do
   describe "#user" do
     context "when user is found" do
       it "shows user details" do
-        user = APIClient.user(username: "admin")
+        user = APIClient.user(name: "admin")
         expect(api_request("/users/admin")).to have_been_made
         expect(last_response.status).to eq(200)
         expect(user.name).to eq("admin")
@@ -22,7 +22,7 @@ describe CMAPI::Client, :vcr do
 
     context "when user is not found" do
       it "returns an error" do
-        response = APIClient.user(username: "whodis")
+        response = APIClient.user(name: "whodis")
         expect(last_response.status).to eq(404)
         expect(response.message).to_not be_empty
       end
@@ -43,6 +43,27 @@ describe CMAPI::Client, :vcr do
       it "returns an error" do
         response = APIClient.create_user(name: "admin", password: "I know, this should be better")
         expect(last_response.status).to eq(400)
+        expect(response.message).to_not be_empty
+      end
+    end
+  end
+
+  describe "#delete_user" do
+    context "when the user exists" do
+      it "deletes the user from CDM" do
+        APIClient.create_user(name: "deleteme", password: "SuperSECRET!")
+        expect(last_response.status).to eq(200)
+
+        response = APIClient.delete_user(name: "deleteme")
+        expect(last_response.status).to eq(200)
+        expect(response.name).to eq("deleteme")
+      end
+    end
+
+    context "when the user doesn't exist" do
+      it "returns an error" do
+        response = APIClient.delete_user(name: "notfoundhere")
+        expect(last_response.status).to eq(404)
         expect(response.message).to_not be_empty
       end
     end

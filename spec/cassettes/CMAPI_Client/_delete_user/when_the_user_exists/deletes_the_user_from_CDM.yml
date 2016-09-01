@@ -1,0 +1,91 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: http://localhost:7180/api/v13/users
+    body:
+      encoding: UTF-8
+      string: '{"items":[{"name":"deleteme","password":"SuperSECRET!","roles":[]}]}'
+    headers:
+      User-Agent:
+      - Faraday v0.9.2
+      Authorization:
+      - Basic Y2xvdWRlcmE6Y2xvdWRlcmE=
+      Content-Type:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Expires:
+      - Thu, 01-Jan-1970 00:00:00 GMT
+      Set-Cookie:
+      - CLOUDERA_MANAGER_SESSIONID=1tdfl27e8pw3b7b5gj9uvsza2;Path=/;HttpOnly
+      Content-Type:
+      - application/json
+      Date:
+      - Tue, 30 Aug 2016 10:06:37 GMT
+      Transfer-Encoding:
+      - chunked
+      Server:
+      - Jetty(6.1.26.cloudera.4)
+    body:
+      encoding: UTF-8
+      string: |-
+        {
+          "items" : [ {
+            "name" : "deleteme",
+            "roles" : [ "ROLE_USER" ]
+          } ]
+        }
+    http_version: 
+  recorded_at: Thu, 01 Sep 2016 21:36:04 GMT
+- request:
+    method: delete
+    uri: http://localhost:7180/api/v13/users/deleteme
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.9.2
+      Authorization:
+      - Basic Y2xvdWRlcmE6Y2xvdWRlcmE=
+      Content-Type:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Expires:
+      - Thu, 01-Jan-1970 00:00:00 GMT
+      Set-Cookie:
+      - CLOUDERA_MANAGER_SESSIONID=v7yuet3ppv7u1day5p655rjmt;Path=/;HttpOnly
+      Content-Type:
+      - application/json
+      Date:
+      - Tue, 30 Aug 2016 10:06:37 GMT
+      Transfer-Encoding:
+      - chunked
+      Server:
+      - Jetty(6.1.26.cloudera.4)
+    body:
+      encoding: UTF-8
+      string: |-
+        {
+          "name" : "deleteme",
+          "roles" : [ "ROLE_USER" ]
+        }
+    http_version: 
+  recorded_at: Thu, 01 Sep 2016 21:36:04 GMT
+recorded_with: VCR 3.0.3
