@@ -82,4 +82,22 @@ describe CMAPI::Client, :vcr do
       end
     end
   end
+
+  describe "#cluster_service_types" do
+    context "when the cluster exists" do
+      it "deletes the cluster" do
+        response = APIClient.cluster_service_types(name: "Cloudera QuickStart")
+        expect(last_response.status).to eq(200)
+        expect(response.items).to include("YARN")
+      end
+    end
+
+    context "when the cluster is not found" do
+      it "returns an appropriate error resource" do
+        response = APIClient.cluster_service_types(name: "unknown cluster")
+        expect(last_response.status).to eq(404)
+        expect(response.message).to_not be_empty
+      end
+    end
+  end
 end

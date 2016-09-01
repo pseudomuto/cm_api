@@ -53,6 +53,14 @@ module CMAPI
         delete("/clusters/#{name}")
       end
 
+      # Gets the supported service types for a cluster
+      #
+      # @param name [String] the name of the cluster
+      # @return [Resource] the supported service types (names)
+      def cluster_service_types(name:)
+        get("/clusters/#{name}/serviceTypes")
+      end
+
       private
 
       def ensure_valid_version!(version:, full_version:)

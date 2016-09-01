@@ -1,0 +1,45 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: http://localhost:7180/api/v13/clusters/Cloudera%20QuickStart/serviceTypes
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.9.2
+      Authorization:
+      - Basic Y2xvdWRlcmE6Y2xvdWRlcmE=
+      Content-Type:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Expires:
+      - Thu, 01-Jan-1970 00:00:00 GMT
+      Set-Cookie:
+      - CLOUDERA_MANAGER_SESSIONID=ye2xjk1sc1n21lds8qe8k24ah;Path=/;HttpOnly
+      Content-Type:
+      - application/json
+      Date:
+      - Tue, 30 Aug 2016 03:47:18 GMT
+      Transfer-Encoding:
+      - chunked
+      Server:
+      - Jetty(6.1.26.cloudera.4)
+    body:
+      encoding: UTF-8
+      string: |-
+        {
+          "items" : [ "KAFKA", "SPARK_ON_YARN", "ISILON", "HIVE", "KEYTRUSTEE", "HBASE", "KEYTRUSTEE_SERVER", "OOZIE", "KMS", "FLUME", "SQOOP_CLIENT", "HDFS", "KS_INDEXER", "SPARK", "ACCUMULO16", "YARN", "HUE", "ZOOKEEPER", "MAPREDUCE", "SQOOP", "SENTRY", "SOLR", "IMPALA" ]
+        }
+    http_version: 
+  recorded_at: Thu, 01 Sep 2016 04:11:17 GMT
+recorded_with: VCR 3.0.3
