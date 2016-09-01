@@ -25,11 +25,11 @@ http_interactions:
       Expires:
       - Thu, 01-Jan-1970 00:00:00 GMT
       Set-Cookie:
-      - CLOUDERA_MANAGER_SESSIONID=1mcvhcil1mvavgr3maxefqc9e;Path=/;HttpOnly
+      - CLOUDERA_MANAGER_SESSIONID=1ujs7nlp6oqfq1md2iz3mnr0v5;Path=/;HttpOnly
       Content-Type:
       - application/json
       Date:
-      - Tue, 30 Aug 2016 07:31:50 GMT
+      - Tue, 30 Aug 2016 09:23:04 GMT
       Transfer-Encoding:
       - chunked
       Server:
@@ -50,7 +50,7 @@ http_interactions:
           } ]
         }
     http_version: 
-  recorded_at: Thu, 01 Sep 2016 18:01:03 GMT
+  recorded_at: Thu, 01 Sep 2016 20:52:30 GMT
 - request:
     method: put
     uri: http://localhost:7180/api/v13/clusters/To%20Be%20Updated
@@ -76,11 +76,11 @@ http_interactions:
       Expires:
       - Thu, 01-Jan-1970 00:00:00 GMT
       Set-Cookie:
-      - CLOUDERA_MANAGER_SESSIONID=36y6om32jy95qg7quz9pl2zu;Path=/;HttpOnly
+      - CLOUDERA_MANAGER_SESSIONID=1af77p6yr0yzk1fnbhh8moefp9;Path=/;HttpOnly
       Content-Type:
       - application/json
       Date:
-      - Tue, 30 Aug 2016 07:31:50 GMT
+      - Tue, 30 Aug 2016 09:23:04 GMT
       Transfer-Encoding:
       - chunked
       Server:
@@ -99,5 +99,5 @@ http_interactions:
           "hostsUrl" : "http://quickstart.cloudera:7180/cmf/clusterRedirect/To+Be+Updated/hosts"
         }
     http_version: 
-  recorded_at: Thu, 01 Sep 2016 18:01:03 GMT
+  recorded_at: Thu, 01 Sep 2016 20:52:31 GMT
 recorded_with: VCR 3.0.3

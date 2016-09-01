@@ -8,6 +8,9 @@ module CMAPI
   # An error that's raised when the version of CDH is not valid
   InvalidCDHVersionError = Class.new(StandardError)
 
+  # An error that's raised when a call is not supported for the specified API version
+  UnsupportedVersionError = Class.new(StandardError)
+
   autoload :VERSION, "cm_api/version"
   autoload :Client, "cm_api/client"
   autoload :Middleware, "cm_api/middleware"

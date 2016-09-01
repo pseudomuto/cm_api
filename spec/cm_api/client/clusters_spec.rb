@@ -81,6 +81,18 @@ describe CMAPI::Client, :vcr do
         expect(response.message).to_not be_empty
       end
     end
+
+    context "when the API version < 2" do
+      it "raises UnsupportedVersionError" do
+        APIClient.create_cluster(name: "Version Test", full_version: "5.8.1")
+        expect(last_response.status).to eq(200)
+
+        client = versioned_api_client(version: 1)
+        expect { client.rename_cluster(name: "Version Test", new_name: "Doesn't Matter") }.to raise_error(
+          CMAPI::UnsupportedVersionError
+        )
+      end
+    end
   end
 
   describe "#update_cluster_version" do
@@ -100,6 +112,18 @@ describe CMAPI::Client, :vcr do
         response = APIClient.update_cluster_version(name: "Not here", full_version: "5.8.1")
         expect(last_response.status).to eq(404)
         expect(response.message).to_not be_empty
+      end
+    end
+
+    context "when the API version < 2" do
+      it "raises UnsupportedVersionError" do
+        APIClient.create_cluster(name: "Update Cluster Version Test", full_version: "5.8.1")
+        expect(last_response.status).to eq(200)
+
+        client = versioned_api_client(version: 1)
+        expect { client.rename_cluster(name: "Update Cluster Version Test", new_name: "Meh") }.to raise_error(
+          CMAPI::UnsupportedVersionError
+        )
       end
     end
   end
