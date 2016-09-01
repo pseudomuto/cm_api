@@ -48,6 +48,35 @@ describe CMAPI::Client, :vcr do
     end
   end
 
+  describe "#update_user" do
+    context "when neither password nor roles are supplied" do
+      it "fetches the user details" do
+        APIClient.update_user(name: "admin")
+        expect(api_request("/users/admin", method: :get)).to have_been_made
+      end
+    end
+
+    context "when password and roles supplied" do
+      it "updates the user" do
+        APIClient.create_user(name: "updater", password: "will be updated")
+        expect(last_response.status).to eq(200)
+
+        response = APIClient.update_user(name: "updater", password: "NewPass", roles: %w(ROLE_ADMIN))
+        expect(last_response.status).to eq(200)
+        expect(response.roles).to include("ROLE_ADMIN")
+        expect(response.roles).to_not include("ROLE_USER")
+      end
+    end
+
+    context "when the user doesn't exist" do
+      it "returns an error" do
+        response = APIClient.update_user(name: "notme", password: "someRandoPass")
+        expect(last_response.status).to eq(404)
+        expect(response.message).to_not be_empty
+      end
+    end
+  end
+
   describe "#delete_user" do
     context "when the user exists" do
       it "deletes the user from CDM" do

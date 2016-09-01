@@ -2,6 +2,8 @@
 module CMAPI
   class Client
     module Users
+      using Refinements
+
       # Gets a list of CDM users
       #
       # @return [Resources::Base] the list of users
@@ -28,6 +30,22 @@ module CMAPI
 
         resource = post("/users", body: { items: [body] })
         resource.is_a?(Array) ? resource.first : resource
+      end
+
+      # Updates an existing user
+      #
+      # @param name [String] the user's username
+      # @param password [String] the new password (pass `nil` to skip update)
+      # @param roles [Array<String>] the new roles for the user (leave empty to skip update)
+      # @return [Resources::Base] the updated user
+      def update_user(name:, password: nil, roles: [])
+        return user(name: name) if password.blank? && roles.blank?
+
+        body            = { name: name }
+        body[:password] = password unless password.blank?
+        body[:roles]    = roles unless roles.blank?
+
+        put("/users/#{name}", body: body)
       end
 
       # Deletes the specified user from CDM
