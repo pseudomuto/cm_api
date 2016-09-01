@@ -25,11 +25,11 @@ http_interactions:
       Expires:
       - Thu, 01-Jan-1970 00:00:00 GMT
       Set-Cookie:
-      - CLOUDERA_MANAGER_SESSIONID=wn6lyrqbd5j42g3ka80nrce;Path=/;HttpOnly
+      - CLOUDERA_MANAGER_SESSIONID=1ned3x8dyzb31nsfq4tifcucp;Path=/;HttpOnly
       Content-Type:
       - application/json
       Date:
-      - Mon, 29 Aug 2016 22:49:53 GMT
+      - Tue, 30 Aug 2016 02:43:02 GMT
       Transfer-Encoding:
       - chunked
       Server:
@@ -48,8 +48,18 @@ http_interactions:
             "clusterUrl" : "http://quickstart.cloudera:7180/cmf/clusterRedirect/Cloudera+QuickStart",
             "hostsUrl" : "http://quickstart.cloudera:7180/cmf/clusterRedirect/Cloudera+QuickStart/hosts",
             "entityStatus" : "STOPPED"
+          }, {
+            "name" : "New Cluster",
+            "displayName" : "New Cluster",
+            "version" : "CDH5",
+            "fullVersion" : "5.8.1",
+            "maintenanceMode" : false,
+            "maintenanceOwners" : [ ],
+            "clusterUrl" : "http://quickstart.cloudera:7180/cmf/clusterRedirect/New+Cluster",
+            "hostsUrl" : "http://quickstart.cloudera:7180/cmf/clusterRedirect/New+Cluster/hosts",
+            "entityStatus" : "NONE"
           } ]
         }
     http_version: 
-  recorded_at: Tue, 30 Aug 2016 13:14:00 GMT
+  recorded_at: Thu, 01 Sep 2016 03:07:03 GMT
 recorded_with: VCR 3.0.3

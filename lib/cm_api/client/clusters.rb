@@ -9,7 +9,7 @@ module CMAPI
       # @param view [String] the view to return.
       #   Valid values are summary (default), full, full_with_health_check_explanation, export, export_redacted
       # @return [Resource] the list of managed clusters
-      def list_clusters(view: "summary")
+      def clusters(view: "summary")
         get("/clusters", view: view)
       end
 
