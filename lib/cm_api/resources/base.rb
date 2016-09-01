@@ -4,37 +4,39 @@ module CMAPI
     # A base class for for API responses
     #
     # This class will convert json responses into objects that respond to methods with the same name as the JSON
-    # properties returned.
+    # properties returned (only snake_cased because Ruby).
     #
     # @example
     #   # a simple json object
-    #   resource = Base.new('{"message": "value"}')
-    #   resource.message #=> "value"
+    #   resource = Base.new('{"someMessage": "value"}')
+    #   resource.some_message #=> "value"
     #
     # @example
     #   # a json object with nested properties
     #   json = <<-EOF
     #   {
     #     "items": [
-    #       { "name": "test", "values": [1, 2, 3], "child": { "key": "value" } }
+    #       { "name": "test", "values": [1, 2, 3], "child": { "keyName": "value" } }
     #     ]
     #   }
     #   EOF
     #
     #   resource = Base.new(JSON.parse(json))
-    #   resource.items.size              #=> 1
-    #   resource.items.first.values.last #=> 3
-    #   resource.items.first.child.key   #=> "value"
+    #   resource.items.size                 #=> 1
+    #   resource.items.first.values.last    #=> 3
+    #   resource.items.first.child.key_name #=> "value"
     class Base
       class << self
         private
 
         def dynamic_accessor(*attrs)
           attrs.each do |attr|
+            attr_name = attr.gsub(/([A-Z]+)/, "_\\1").downcase
+
             class_eval do
-              define_method(attr) { _attributes[attr] }
-              define_method("#{attr}=") { |value| _attributes[attr] = value }
-              define_method("#{attr}?") { !!_attributes[attr] }
+              define_method(attr_name) { _attributes[attr] }
+              define_method("#{attr_name}=") { |value| _attributes[attr] = value }
+              define_method("#{attr_name}?") { !!_attributes[attr] }
             end
           end
         end

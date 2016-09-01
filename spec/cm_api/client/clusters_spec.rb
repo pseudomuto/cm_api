@@ -6,7 +6,7 @@ describe CMAPI::Client, :vcr do
         response = APIClient.cluster(name: "Cloudera QuickStart")
         expect(api_request("/clusters/Cloudera QuickStart")).to have_been_made
         expect(last_response.status).to eq(200)
-        expect(response.displayName).to eq("Cloudera QuickStart")
+        expect(response.display_name).to eq("Cloudera QuickStart")
       end
     end
 
@@ -25,14 +25,14 @@ describe CMAPI::Client, :vcr do
       response = APIClient.clusters
       expect(api_request("/clusters?view=summary")).to have_been_made
       expect(last_response.status).to eq(200)
-      expect(response[0].displayName).to eq("Cloudera QuickStart")
+      expect(response[0].display_name).to eq("Cloudera QuickStart")
     end
 
     it "accepts a custom view parameter" do
       response = APIClient.clusters(view: "full")
       expect(api_request("/clusters?view=full")).to have_been_made
       expect(last_response.status).to eq(200)
-      expect(response[0].displayName).to eq("Cloudera QuickStart")
+      expect(response[0].display_name).to eq("Cloudera QuickStart")
     end
   end
 
@@ -70,7 +70,7 @@ describe CMAPI::Client, :vcr do
 
         response = APIClient.rename_cluster(name: "To Be Updated", new_name: "Updated Cluster")
         expect(last_response.status).to eq(200)
-        expect(response.displayName).to eq("Updated Cluster")
+        expect(response.display_name).to eq("Updated Cluster")
       end
     end
 
@@ -103,7 +103,7 @@ describe CMAPI::Client, :vcr do
 
         response = APIClient.update_cluster_version(name: "Update CDH", full_version: "5.8.1")
         expect(last_response.status).to eq(200)
-        expect(response.fullVersion).to eq("5.8.1")
+        expect(response.full_version).to eq("5.8.1")
       end
     end
 
