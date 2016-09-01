@@ -25,14 +25,14 @@ describe CMAPI::Client, :vcr do
       response = APIClient.clusters
       expect(api_request("/clusters?view=summary")).to have_been_made
       expect(last_response.status).to eq(200)
-      expect(response.items[0].displayName).to eq("Cloudera QuickStart")
+      expect(response[0].displayName).to eq("Cloudera QuickStart")
     end
 
     it "accepts a custom view parameter" do
       response = APIClient.clusters(view: "full")
       expect(api_request("/clusters?view=full")).to have_been_made
       expect(last_response.status).to eq(200)
-      expect(response.items[0].displayName).to eq("Cloudera QuickStart")
+      expect(response[0].displayName).to eq("Cloudera QuickStart")
     end
   end
 
@@ -88,7 +88,7 @@ describe CMAPI::Client, :vcr do
       it "deletes the cluster" do
         response = APIClient.cluster_service_types(name: "Cloudera QuickStart")
         expect(last_response.status).to eq(200)
-        expect(response.items).to include("YARN")
+        expect(response).to include("YARN")
       end
     end
 

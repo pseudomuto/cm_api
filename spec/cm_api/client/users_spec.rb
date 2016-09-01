@@ -5,7 +5,7 @@ describe CMAPI::Client, :vcr do
       users = APIClient.users
       expect(api_request("/users")).to have_been_made
       expect(last_response.status).to eq(200)
-      expect(users.items).to be_kind_of(Array)
+      expect(users).to be_kind_of(Array)
     end
   end
 
@@ -24,7 +24,7 @@ describe CMAPI::Client, :vcr do
       sessions = APIClient.user_sessions
       expect(api_request("/users/sessions")).to have_been_made
       expect(last_response.status).to eq(200)
-      expect(sessions.items).to be_kind_of(Array)
+      expect(sessions).to be_kind_of(Array)
     end
   end
 end

@@ -41,7 +41,7 @@ module CMAPI
         }
 
         resource = post("/clusters", body: { items: [body] })
-        resource.respond_to?(:items) ? resource.items.first : resource
+        resource.is_a?(Array) ? resource.first : resource
       end
 
       # Deletes the specified cluster
