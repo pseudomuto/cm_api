@@ -44,6 +44,19 @@ module CMAPI
         resource.is_a?(Array) ? resource.first : resource
       end
 
+      # Rename an existing cluster
+      # @see http://cloudera.github.io/cm_api/apidocs/v13/path__clusters_-clusterName-.html
+      #
+      # @param name [String] the name of the existing cluster
+      # @param new_name [String] the new name for the cluster
+      # @return [Resources::Base] the updated cluster
+      def rename_cluster(name:, new_name:)
+        body = { displayName: new_name }
+        body = { name: new_name } if version < 6
+
+        put("/clusters/#{name}", body: body)
+      end
+
       # Deletes the specified cluster
       # @see http://cloudera.github.io/cm_api/apidocs/v13/path__clusters_-clusterName-.html
       #

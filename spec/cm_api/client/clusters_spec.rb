@@ -62,6 +62,27 @@ describe CMAPI::Client, :vcr do
     end
   end
 
+  describe "#rename_cluster" do
+    context "when the cluster exists" do
+      it "updates the name" do
+        APIClient.create_cluster(name: "To Be Updated", full_version: "5.8.1")
+        expect(last_response.status).to eq(200)
+
+        response = APIClient.rename_cluster(name: "To Be Updated", new_name: "Updated Cluster")
+        expect(last_response.status).to eq(200)
+        expect(response.displayName).to eq("Updated Cluster")
+      end
+    end
+
+    context "when the cluster is not found" do
+      it "returns the error resource" do
+        response = APIClient.rename_cluster(name: "Not here", new_name: "Won't be applied")
+        expect(last_response.status).to eq(404)
+        expect(response.message).to_not be_empty
+      end
+    end
+  end
+
   describe "#delete_cluster" do
     context "when the cluster exists" do
       it "deletes the cluster" do

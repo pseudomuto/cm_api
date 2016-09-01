@@ -25,7 +25,7 @@ module CMAPI
     DEFAULT_USER    = "admin"
     DEFAULT_PASS    = "admin"
     DEFAULT_PORT    = 7180
-    DEFAULT_VERSION = "v13"
+    DEFAULT_VERSION = 13
 
     using Refinements
 
@@ -40,7 +40,7 @@ module CMAPI
     # @return [String] the API host name
     attr_reader :host
 
-    # @return [String] the API version
+    # @return [Integer] the API version
     attr_reader :version
 
     # @return [Integer] the API port
@@ -70,7 +70,7 @@ module CMAPI
       @version = version
     end
 
-    # Make a get request to the API.
+    # Make a GET request to the API.
     #
     # @param path [String] the path to the resource (not including /api/{version})
     # @param params [Hash] query string parameters to be passed
@@ -87,7 +87,7 @@ module CMAPI
       @last_response.body
     end
 
-    # Make a post request to the API.
+    # Make a POST request to the API.
     #
     # @param path [String] the path to the resource (not including /api/{version})
     # @param body [Hash] the optional request body to send
@@ -95,7 +95,7 @@ module CMAPI
     #
     # @example
     #   client = CMAPI::Client.new(host: "myhost.com")
-    #   resource = client.post("/clusters", body: { name: "New Cluster", full_version: "5.8.1")
+    #   resource = client.post("/clusters", body: { name: "New Cluster", full_version: "5.8.1" })
     #
     #   resource.name #=> "New Cluster"
     def post(path, body: nil)
@@ -105,7 +105,25 @@ module CMAPI
       @last_response.body
     end
 
-    # Make a delete request to the API.
+    # Make a PUT request to the API.
+    #
+    # @param path [String] the path to the resource (not including /api/{version})
+    # @param body [Hash] the optional request body to send
+    # @return [Resource] the parsed resource from the response
+    #
+    # @example
+    #   client = CMAPI::Client.new(host: "myhost.com")
+    #   resource = client.put("/clusters/New+Cluster", body: { name: "Newer Cluster"})
+    #
+    #   resource.name #=> "Newer Cluster"
+    def put(path, body: nil)
+      body ||= {}
+
+      @last_response = connection.put(normalize_path(path), JSON.generate(body))
+      @last_response.body
+    end
+
+    # Make a DELETE request to the API.
     #
     # @param path [String] the path to the resource (not including /api/{version})
     # @param params [Hash] query string parameters to be passed
@@ -134,7 +152,7 @@ module CMAPI
 
     def normalize_path(path)
       path = "/#{path}" unless path.start_with?("/")
-      URI.encode("/api/#{version}#{path}")
+      URI.encode("/api/v#{version}#{path}")
     end
 
     def base_url
