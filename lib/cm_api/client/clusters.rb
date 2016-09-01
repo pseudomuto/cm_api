@@ -57,6 +57,16 @@ module CMAPI
         put("/clusters/#{name}", body: body)
       end
 
+      # Update the CDH version for a cluster.
+      # @see http://cloudera.github.io/cm_api/apidocs/v13/path__clusters_-clusterName-.html
+      #
+      # @param name [String] the name of the cluster
+      # @param full_version [String] the full version for the cluster (e.g. 5.8.1)
+      # @return [Resources::Base] the updated cluster
+      def update_cluster_version(name:, full_version:)
+        put("/clusters/#{name}", body: { fullVersion: full_version })
+      end
+
       # Deletes the specified cluster
       # @see http://cloudera.github.io/cm_api/apidocs/v13/path__clusters_-clusterName-.html
       #

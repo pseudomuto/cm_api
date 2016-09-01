@@ -83,6 +83,27 @@ describe CMAPI::Client, :vcr do
     end
   end
 
+  describe "#update_cluster_version" do
+    context "when the cluster exists" do
+      it "updates the version of CDH for the cluster" do
+        APIClient.create_cluster(name: "Update CDH", full_version: "5.8.0")
+        expect(last_response.status).to eq(200)
+
+        response = APIClient.update_cluster_version(name: "Update CDH", full_version: "5.8.1")
+        expect(last_response.status).to eq(200)
+        expect(response.fullVersion).to eq("5.8.1")
+      end
+    end
+
+    context "when the cluster is not found" do
+      it "returns the error resource" do
+        response = APIClient.update_cluster_version(name: "Not here", full_version: "5.8.1")
+        expect(last_response.status).to eq(404)
+        expect(response.message).to_not be_empty
+      end
+    end
+  end
+
   describe "#delete_cluster" do
     context "when the cluster exists" do
       it "deletes the cluster" do
