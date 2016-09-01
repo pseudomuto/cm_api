@@ -46,11 +46,13 @@ module CMAPI
 
       # Rename an existing cluster
       # @see http://cloudera.github.io/cm_api/apidocs/v13/path__clusters_-clusterName-.html
+      # @raise [UnsupportedVersionError] when version < 2
       #
       # @param name [String] the name of the existing cluster
       # @param new_name [String] the new name for the cluster
       # @return [Resources::Base] the updated cluster
       def rename_cluster(name:, new_name:)
+        enforce_min_version!(2)
         body = { displayName: new_name }
         body = { name: new_name } if version < 6
 
@@ -59,11 +61,13 @@ module CMAPI
 
       # Update the CDH version for a cluster.
       # @see http://cloudera.github.io/cm_api/apidocs/v13/path__clusters_-clusterName-.html
+      # @raise [UnsupportedVersionError] when version < 2
       #
       # @param name [String] the name of the cluster
       # @param full_version [String] the full version for the cluster (e.g. 5.8.1)
       # @return [Resources::Base] the updated cluster
       def update_cluster_version(name:, full_version:)
+        enforce_min_version!(2)
         put("/clusters/#{name}", body: { fullVersion: full_version })
       end
 

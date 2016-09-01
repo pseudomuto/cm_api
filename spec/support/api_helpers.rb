@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 APIClient = CMAPI::Client.new(host: "localhost", user: "cloudera", pass: "cloudera")
 
+def versioned_api_client(version:)
+  CMAPI::Client.new(host: "localhost", user: "cloudera", pass: "cloudera", version: version)
+end
+
 def last_response
   APIClient.last_response
 end

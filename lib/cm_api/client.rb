@@ -169,5 +169,9 @@ module CMAPI
     def secure?
       !!https
     end
+
+    def enforce_min_version!(api_version)
+      raise UnsupportedVersionError, "Only versions >= #{api_version} are supported." unless version >= api_version
+    end
   end
 end
