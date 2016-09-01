@@ -4,7 +4,7 @@ module CMAPI
     module Users
       # Gets a list of CDM users
       #
-      # @return [Resource] the list of users
+      # @return [Resources::Base] the list of users
       def users
         get("/users")
       end
@@ -19,7 +19,7 @@ module CMAPI
 
       # Looks up current user sessions
       #
-      # @return [Resource] the currently active sessions
+      # @return [Resources::Base] the currently active sessions
       def user_sessions
         get("/users/sessions")
       end

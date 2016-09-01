@@ -1,15 +1,15 @@
 # frozen_string_literal: true
 module CMAPI
   module Middleware
-    # Response middleware for converting a response body into a {Resource}
+    # Response middleware for converting a response body into a {Resources::Base}
     class Response < Faraday::Response::Middleware
-      # Parse the response into a {Resource} object
+      # Parse the response into a {Resources::Base} object
       #
       # @param response [String] the response body
-      # @return [Resource] the parsed resource
+      # @return [Resources::Base] the parsed resource
       def parse(response)
         json = JSON.parse(response)
-        Resource.new(json)
+        Resources::Base.new(json)
       end
     end
   end

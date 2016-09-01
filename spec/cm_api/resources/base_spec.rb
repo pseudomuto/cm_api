@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-describe CMAPI::Resource do
+describe CMAPI::Resources::Base do
   let(:subject) { described_class.new(json_fixture("resource.json")) }
 
   it "recursively defines attr accessors for all properties" do
