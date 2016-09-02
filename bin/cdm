@@ -1,4 +1,0 @@
-#!/bin/bash
-set -xeuo pipefail
-docker build -t cmapi/cloudera_manager .
-docker run -it -p 7180:7180 cmapi/cloudera_manager
