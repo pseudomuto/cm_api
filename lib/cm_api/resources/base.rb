@@ -42,10 +42,15 @@ module CMAPI
         end
       end
 
+      # @return [Client] the API client that initiated the request
+      attr_reader :api_client
+
       # Creates a new resource
       #
       # @param json [Hash] a json object
-      def initialize(json)
+      # @param api_client [Client] the API client that initiated the request
+      def initialize(json, api_client:)
+        @api_client = api_client
         json.each { |key, value| _attributes[key] = parse_attribute(value) }
 
         metaclass = (class << self; self; end)
@@ -60,7 +65,7 @@ module CMAPI
 
       def parse_attribute(attr)
         case attr
-        when Hash then self.class.new(attr)
+        when Hash then self.class.new(attr, api_client: api_client)
         when Array then attr.map(&method(:parse_attribute))
         else attr
         end

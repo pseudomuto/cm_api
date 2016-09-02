@@ -1,6 +1,12 @@
 # frozen_string_literal: true
 describe CMAPI::Resources::Base do
-  let(:subject) { described_class.new(json_fixture("resource.json")) }
+  let(:subject) { described_class.new(json_fixture("resource.json"), api_client: APIClient) }
+
+  it "assigns #api_client recursively" do
+    expect(subject.api_client).to be(APIClient)
+    expect(subject.object.api_client).to be(subject.api_client)
+    expect(subject.object.tags[0].api_client).to be(subject.api_client)
+  end
 
   it "recursively defines attr accessors for all properties" do
     expect(subject.object.id).to eq(1)
@@ -14,7 +20,7 @@ describe CMAPI::Resources::Base do
   context "when object contains camelCased keys" do
     let(:subject) do
       json = JSON.generate(keyName: { child: { subKey: "value" } })
-      described_class.new(JSON.parse(json))
+      described_class.new(JSON.parse(json), api_client: APIClient)
     end
 
     it "recursively converts them to snake_case for goodness' sake" do

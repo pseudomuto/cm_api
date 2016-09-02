@@ -145,7 +145,7 @@ module CMAPI
       @connection ||= Faraday.new(base_url) do |conn|
         conn.request(:basic_auth, @user, @pass)
         conn.request(:cmapi_request)
-        conn.response(:cmapi_response)
+        conn.response(:cmapi_response, self)
         conn.adapter(Faraday.default_adapter)
       end
     end
