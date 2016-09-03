@@ -1,9 +1,15 @@
 # frozen_string_literal: true
 describe CMAPI::Client do
+  let(:client) { described_class.new(host: "cloudera-test.com") }
+
+  def api_path(path)
+    "http://#{client.host}:#{client.port}/api/v13#{path}"
+  end
+
   describe "initialize" do
     it "defaults port to DEFAULT_PORT" do
-      client = described_class.new(host: "www.example.com")
-      expect(client.port).to eq(described_class::DEFAULT_PORT)
+      api_client = described_class.new(host: "www.example.com")
+      expect(api_client.port).to eq(described_class::DEFAULT_PORT)
     end
 
     context "when host not valid" do
@@ -16,92 +22,136 @@ describe CMAPI::Client do
   end
 
   describe "#get" do
-    let(:client) { described_class.new(host: "cloudera-test.com") }
+    context "when response is successful" do
+      it "gets the specified resource" do
+        request = stub_request(:get, api_path("/tools/echo")).to_return(body: '{ "message": "" }')
 
-    it "gets the specified resource" do
-      request = stub_request(:get, "http://cloudera-test.com:7180/api/v13/tools/echo").to_return(
-        body: '{ "message": "" }'
-      )
+        client.get("/tools/echo")
+        expect(request).to have_been_requested
+      end
 
-      client.get("/tools/echo")
-      expect(request).to have_been_requested
+      it "adds params as query string params" do
+        request = stub_request(:get, api_path("/tools/echo?message=test")).to_return(body: '{ "message": "test" }')
+
+        client.get("/tools/echo", message: "test")
+        expect(request).to have_been_requested
+      end
     end
 
-    it "adds params as query string params" do
-      request = stub_request(:get, "http://cloudera-test.com:7180/api/v13/tools/echo?message=test").to_return(
-        body: '{ "message": "test" }'
-      )
+    context "when response is unsuccessful" do
+      it "returns an error object" do
+        stub_request(:get, api_path("/error")).to_return(
+          body: '{ "message": "not found" }',
+          status: 404
+        )
 
-      client.get("/tools/echo", message: "test")
-      expect(request).to have_been_requested
+        result = client.get("/error")
+        expect(result).to be_kind_of(CMAPI::Error)
+        expect(result.status).to eq(404)
+        expect(result.message).to eq("not found")
+      end
     end
   end
 
   describe "#post" do
-    let(:client) { described_class.new(host: "cloudera-test.com") }
+    context "when successful" do
+      it "posts to the specified resource" do
+        request = stub_request(:post, api_path("/post_test")).to_return(body: '{ "items": [] }')
 
-    it "posts to the specified resource" do
-      request = stub_request(:post, "http://cloudera-test.com:7180/api/v13/post_test").to_return(
-        body: '{ "items": [] }'
-      )
+        client.post("/post_test")
+        expect(request).to have_been_requested
+      end
 
-      client.post("/post_test")
-      expect(request).to have_been_requested
+      it "sends the body along with the request when supplied" do
+        body    = { test: "value" }
+        request = stub_request(:post, api_path("/post_test"))
+                  .with { |req| req.body == JSON.generate(body) }
+                  .to_return(body: '{ "items": [] }')
+
+        client.post("/post_test", body: body)
+        expect(request).to have_been_requested
+      end
     end
 
-    it "sends the body along with the request when supplied" do
-      body    = { test: "value" }
-      request = stub_request(:post, "http://cloudera-test.com:7180/api/v13/post_test")
-                .with { |req| req.body == JSON.generate(body) }
-                .to_return(body: '{ "items": [] }')
+    context "when response is unsuccessful" do
+      it "returns an error object" do
+        stub_request(:post, api_path("/error")).to_return(
+          body: '{ "message": "unknown field or something" }',
+          status: 400
+        )
 
-      client.post("/post_test", body: body)
-      expect(request).to have_been_requested
+        result = client.post("/error")
+        expect(result).to be_kind_of(CMAPI::Error)
+        expect(result.status).to eq(400)
+        expect(result.message).to eq("unknown field or something")
+      end
     end
   end
 
   describe "#put" do
-    let(:client) { described_class.new(host: "cloudera-test.com") }
+    context "when successful" do
+      it "puts to the specified resource" do
+        request = stub_request(:put, api_path("/put_test")).to_return(body: '{ "items": [] }')
 
-    it "puts to the specified resource" do
-      request = stub_request(:put, "http://cloudera-test.com:7180/api/v13/put_test").to_return(
-        body: '{ "items": [] }'
-      )
+        client.put("/put_test")
+        expect(request).to have_been_requested
+      end
 
-      client.put("/put_test")
-      expect(request).to have_been_requested
+      it "sends the body along with the request when supplied" do
+        body    = { test: "value" }
+        request = stub_request(:put, api_path("/put_test"))
+                  .with { |req| req.body == JSON.generate(body) }
+                  .to_return(body: '{ "items": [] }')
+
+        client.put("/put_test", body: body)
+        expect(request).to have_been_requested
+      end
     end
 
-    it "sends the body along with the request when supplied" do
-      body    = { test: "value" }
-      request = stub_request(:put, "http://cloudera-test.com:7180/api/v13/put_test")
-                .with { |req| req.body == JSON.generate(body) }
-                .to_return(body: '{ "items": [] }')
+    context "when response is unsuccessful" do
+      it "returns an error object" do
+        stub_request(:put, api_path("/error")).to_return(
+          body: '{ "message": "unknown field or something" }',
+          status: 400
+        )
 
-      client.put("/put_test", body: body)
-      expect(request).to have_been_requested
+        result = client.put("/error")
+        expect(result).to be_kind_of(CMAPI::Error)
+        expect(result.status).to eq(400)
+        expect(result.message).to eq("unknown field or something")
+      end
     end
   end
 
   describe "#delete" do
-    let(:client) { described_class.new(host: "cloudera-test.com") }
+    context "when successful" do
+      it "deletes the specified resource" do
+        request = stub_request(:delete, api_path("/clusters/test")).to_return(body: '{ "name": "test" }')
 
-    it "deletes the specified resource" do
-      request = stub_request(:delete, "http://cloudera-test.com:7180/api/v13/clusters/test").to_return(
-        body: '{ "name": "test" }'
-      )
+        client.delete("/clusters/test")
+        expect(request).to have_been_requested
+      end
 
-      client.delete("/clusters/test")
-      expect(request).to have_been_requested
+      it "adds params as query string params" do
+        request = stub_request(:delete, api_path("/clusters/test?value=1")).to_return(body: '{ "name": "test" }')
+
+        client.delete("/clusters/test", value: 1)
+        expect(request).to have_been_requested
+      end
     end
 
-    it "adds params as query string params" do
-      request = stub_request(:delete, "http://cloudera-test.com:7180/api/v13/clusters/test?value=1").to_return(
-        body: '{ "name": "test" }'
-      )
+    context "when response is unsuccessful" do
+      it "returns an error object" do
+        stub_request(:delete, api_path("/error")).to_return(
+          body: '{ "message": "not found" }',
+          status: 404
+        )
 
-      client.delete("/clusters/test", value: 1)
-      expect(request).to have_been_requested
+        result = client.delete("/error")
+        expect(result).to be_kind_of(CMAPI::Error)
+        expect(result.status).to eq(404)
+        expect(result.message).to eq("not found")
+      end
     end
   end
 end

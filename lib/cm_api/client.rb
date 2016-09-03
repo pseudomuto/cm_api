@@ -74,7 +74,7 @@ module CMAPI
     #
     # @param path [String] the path to the resource (not including /api/{version})
     # @param params [Hash] query string parameters to be passed
-    # @return [Resource] the parsed resource from the response
+    # @return [Resource,Error] the deleted resource parsed from the response or an {Error}
     #
     # @example
     #   client   = CMAPI::Client.new(host: "myhost.com")
@@ -84,14 +84,14 @@ module CMAPI
     #   resource.message #=> "my error message"
     def get(path, **params)
       @last_response = connection.get(normalize_path(path), params)
-      @last_response.body
+      parsed_response
     end
 
     # Make a POST request to the API.
     #
     # @param path [String] the path to the resource (not including /api/{version})
     # @param body [Hash] the optional request body to send
-    # @return [Resource] the parsed resource from the response
+    # @return [Resource,Error] the deleted resource parsed from the response or an {Error}
     #
     # @example
     #   client = CMAPI::Client.new(host: "myhost.com")
@@ -102,14 +102,14 @@ module CMAPI
       body ||= {}
 
       @last_response = connection.post(normalize_path(path), JSON.generate(body))
-      @last_response.body
+      parsed_response
     end
 
     # Make a PUT request to the API.
     #
     # @param path [String] the path to the resource (not including /api/{version})
     # @param body [Hash] the optional request body to send
-    # @return [Resource] the parsed resource from the response
+    # @return [Resource,Error] the parsed resource from the response or an {Error}
     #
     # @example
     #   client = CMAPI::Client.new(host: "myhost.com")
@@ -120,14 +120,14 @@ module CMAPI
       body ||= {}
 
       @last_response = connection.put(normalize_path(path), JSON.generate(body))
-      @last_response.body
+      parsed_response
     end
 
     # Make a DELETE request to the API.
     #
     # @param path [String] the path to the resource (not including /api/{version})
     # @param params [Hash] query string parameters to be passed
-    # @return [Resource] the deleted resource parsed from the response
+    # @return [Resource,Error] the deleted resource parsed from the response or an {Error}
     #
     # @example
     #   client = CMAPI::Client.new(host: "myhost.com")
@@ -136,7 +136,7 @@ module CMAPI
     #   resource.name #=> "someCluster"
     def delete(path, **params)
       @last_response = connection.delete(normalize_path(path), params)
-      @last_response.body
+      parsed_response
     end
 
     private
@@ -172,6 +172,11 @@ module CMAPI
 
     def enforce_min_version!(api_version)
       raise UnsupportedVersionError, "Only versions >= #{api_version} are supported." unless version >= api_version
+    end
+
+    def parsed_response
+      return Error.new(@last_response) unless @last_response.status / 100 == 2
+      @last_response.body
     end
   end
 end
