@@ -5,7 +5,7 @@ describe CMAPI::Middleware::Response do
   describe "#parse" do
     it "parses response as json and creates a resource object" do
       json = JSON.generate(data: "value")
-      expect(CMAPI::Resources::Base).to receive(:new).with(JSON.parse(json), api_client: APIClient)
+      expect(CMAPI::Resource).to receive(:new).with(JSON.parse(json), api_client: APIClient)
 
       subject.parse(json)
     end

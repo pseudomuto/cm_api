@@ -15,7 +15,7 @@ module CMAPI
   autoload :Client, "cm_api/client"
   autoload :Middleware, "cm_api/middleware"
   autoload :Refinements, "cm_api/refinements"
-  autoload :Resources, "cm_api/resources"
+  autoload :Resource, "cm_api/resource"
 
   Faraday::Request.register_middleware(cmapi_request: -> { Middleware::Request })
   Faraday::Response.register_middleware(cmapi_response: -> { Middleware::Response })

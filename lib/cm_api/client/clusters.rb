@@ -8,7 +8,7 @@ module CMAPI
       #
       # @param view [String] the view to return.
       #   Valid values are summary (default), full, full_with_health_check_explanation, export, export_redacted
-      # @return [Resources::Base] the list of managed clusters
+      # @return [Resource] the list of managed clusters
       def clusters(view: "summary")
         get("/clusters", view: view)
       end
@@ -17,7 +17,7 @@ module CMAPI
       # @see http://cloudera.github.io/cm_api/apidocs/v13/path__clusters_-clusterName-.html
       #
       # @param name [String] the name of the cluster
-      # @return [Resources::Base] the cluster resource
+      # @return [Resource] the cluster resource
       def cluster(name:)
         get("/clusters/#{name}")
       end
@@ -28,7 +28,7 @@ module CMAPI
       # @param name [String] the name of the new cluster
       # @param version [String] the CDH major version (e.g. "CDH5")
       # @param full_version [String] the full version for the cluster (e.g. 5.1.1) version param ignored when specified
-      # @return [Resources::Base] the created cluster resource
+      # @return [Resource] the created cluster resource
       #
       # @note Either version or full_version must be supplied
       def create_cluster(name:, version: nil, full_version: nil)
@@ -50,7 +50,7 @@ module CMAPI
       #
       # @param name [String] the name of the existing cluster
       # @param new_name [String] the new name for the cluster
-      # @return [Resources::Base] the updated cluster
+      # @return [Resource] the updated cluster
       def rename_cluster(name:, new_name:)
         enforce_min_version!(2)
         body = { displayName: new_name }
@@ -65,7 +65,7 @@ module CMAPI
       #
       # @param name [String] the name of the cluster
       # @param full_version [String] the full version for the cluster (e.g. 5.8.1)
-      # @return [Resources::Base] the updated cluster
+      # @return [Resource] the updated cluster
       def update_cluster_version(name:, full_version:)
         enforce_min_version!(2)
         put("/clusters/#{name}", body: { fullVersion: full_version })
@@ -75,7 +75,7 @@ module CMAPI
       # @see http://cloudera.github.io/cm_api/apidocs/v13/path__clusters_-clusterName-.html
       #
       # @param name [String] the name of the cluster to delete
-      # @return [Resources::Base] the deleted cluster
+      # @return [Resource] the deleted cluster
       def delete_cluster(name:)
         delete("/clusters/#{name}")
       end
@@ -83,7 +83,7 @@ module CMAPI
       # Gets the supported service types for a cluster
       #
       # @param name [String] the name of the cluster
-      # @return [Resources::Base] the supported service types (names)
+      # @return [Resource] the supported service types (names)
       def cluster_service_types(name:)
         get("/clusters/#{name}/serviceTypes")
       end
