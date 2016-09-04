@@ -127,6 +127,15 @@ module CMAPI
         get("/clusters/#{name}/dfsServices", view: view)
       end
 
+      # Export the cluster template for the given cluster
+      #
+      # @param name [String] the cluster to export
+      # @param auto_config [Boolean] whether or not to export configs set by auto configuration (default: false)
+      # @return [Resource, Error] the configuration for the cluster or an error
+      def export_cluster(name:, auto_config: false)
+        get("/clusters/#{name}/export", autoConfig: auto_config)
+      end
+
       private
 
       def ensure_valid_version!(version:, full_version:)

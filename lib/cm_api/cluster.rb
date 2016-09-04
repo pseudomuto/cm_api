@@ -49,5 +49,13 @@ module CMAPI
     def dfs_services(view: "summary")
       api_client.cluster_dfs_services(name: name, view: view)
     end
+
+    # Export the cluster template for this cluster
+    #
+    # @param auto_config [Boolean] whether or not to export configs set by auto configuration (default: false)
+    # @return [Resource, Error] the configuration for the cluster or an error
+    def export(auto_config: false)
+      api_client.export_cluster(name: name, auto_config: auto_config)
+    end
   end
 end

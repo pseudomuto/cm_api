@@ -163,6 +163,8 @@ describe CMAPI::Client, :vcr do
     context "when successful" do
       it "returns nil" do
         response = APIClient.auto_assign_cluster_roles(name: "Cloudera QuickStart")
+        expect(api_request("/clusters/Cloudera QuickStart/autoAssignRoles", method: :put)).to have_been_made
+        expect(last_response.status).to eq(204)
         expect(response).to be_nil
       end
     end
@@ -188,6 +190,8 @@ describe CMAPI::Client, :vcr do
     context "when successful" do
       it "returns nil" do
         response = APIClient.auto_configure_cluster(name: "Cloudera QuickStart")
+        expect(api_request("/clusters/Cloudera QuickStart/autoConfigure", method: :put)).to have_been_made
+        expect(last_response.status).to eq(204)
         expect(response).to be_nil
       end
     end
@@ -213,6 +217,8 @@ describe CMAPI::Client, :vcr do
     context "when successful" do
       it "returns an array of DFS services" do
         response = APIClient.cluster_dfs_services(name: "Cloudera QuickStart")
+        expect(api_request("/clusters/Cloudera QuickStart/dfsServices?view=summary")).to have_been_made
+        expect(last_response.status).to eq(200)
         expect(response).to be_kind_of(Array)
         response.each { |service| expect(service).to be_kind_of(CMAPI::Resource) }
       end
@@ -223,6 +229,25 @@ describe CMAPI::Client, :vcr do
         response = APIClient.cluster_dfs_services(name: "unknown cluster")
         expect(response).to be_kind_of(Array)
         expect(response).to be_empty
+      end
+    end
+  end
+
+  describe "#export_cluster" do
+    context "when successful" do
+      it "returns the configuration object" do
+        response = APIClient.export_cluster(name: "Cloudera QuickStart")
+        expect(api_request("/clusters/Cloudera QuickStart/export?autoConfig=false")).to have_been_made
+        expect(last_response.status).to eq(200)
+        expect(response).to be_kind_of(CMAPI::Resource)
+      end
+    end
+
+    context "when an error occurs" do
+      it "returns an error" do
+        response = APIClient.export_cluster(name: "unknown cluster")
+        expect(response).to be_kind_of(CMAPI::Error)
+        expect(response.status).to eq(404)
       end
     end
   end
