@@ -68,12 +68,12 @@ module CMAPI
       def user_sessions
         get("/users/sessions")
       end
-    end
 
-    private
+      private
 
-    def user_or_error(response)
-      response.is_a?(Resource) ? User.new(response) : response
+      def user_or_error(response)
+        response.is_a?(Resource) ? User.new(response) : response
+      end
     end
   end
 end
