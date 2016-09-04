@@ -49,36 +49,14 @@ module CMAPI
         resource.is_a?(Array) ? Cluster.new(resource.first) : resource
       end
 
-      # Rename an existing cluster
-      # @see http://cloudera.github.io/cm_api/apidocs/v13/path__clusters_-clusterName-.html
-      # @raise [UnsupportedVersionError] when version < 2
-      #
-      # @param name [String] the name of the existing cluster
-      # @param new_name [String] the new name for the cluster
-      # @return [Cluster, Error] the updated cluster or an error
-      def rename_cluster(name:, new_name:)
-        update_cluster(name: name, new_name: new_name)
-      end
-
-      # Update the CDH version for a cluster.
-      # @see http://cloudera.github.io/cm_api/apidocs/v13/path__clusters_-clusterName-.html
-      # @raise [UnsupportedVersionError] when version < 2
-      #
-      # @param name [String] the name of the cluster
-      # @param full_version [String] the full version for the cluster (e.g. 5.8.1)
-      # @return [Cluster, Error] the updated cluster or an error
-      def update_cluster_version(name:, full_version:)
-        update_cluster(name: name, full_version: full_version)
-      end
-
-      # Update the CDH version for a cluster.
+      # Update an existing cluster
       # @see http://cloudera.github.io/cm_api/apidocs/v13/path__clusters_-clusterName-.html
       # @raise [UnsupportedVersionError] when version < 2
       #
       # @param name [String] the name of the cluster to update
       # @param new_name [String] the new name for the cluster or `nil` to leave as is
       # @param full_version [String] the full CDH version for the cluster or `nil` to leave as is
-      # @return [Cluster, Error]
+      # @return [Cluster, Error] the updated cluster or an error
       def update_cluster(name:, new_name: nil, full_version: nil)
         enforce_min_version!(2)
 
@@ -86,7 +64,7 @@ module CMAPI
         body[:displayName] = new_name if new_name.present?
         body[:fullVersion] = full_version if full_version.present?
 
-        # API < 6 use the name field rather than displaytName
+        # API < 6: use the name field rather than displaytName
         body[:name] = body.delete(:displayName) if body.key?(:displayName) && version < 6
 
         cluster_or_error(put("/clusters/#{name}", body: body))
