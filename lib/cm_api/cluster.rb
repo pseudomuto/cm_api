@@ -22,5 +22,14 @@ module CMAPI
     def update_version(full_version:)
       api_client.update_cluster(name: name, full_version: full_version)
     end
+
+    # Automatically assign roles to hosts and create the roles for all the services in this cluster.
+    # @raise [UnsupportedVersionError] when version < 6
+    # @since 6
+    #
+    # @return [nil, Error] nil when successful, otherwise the error
+    def auto_assign_roles
+      api_client.auto_assign_cluster_roles(name: name)
+    end
   end
 end

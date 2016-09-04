@@ -16,4 +16,11 @@ describe CMAPI::Cluster do
       expect(api_client).to have_received(:update_cluster).with(name: subject.name, full_version: "1.2.3")
     end
   end
+
+  describe "#auto_assign_roles" do
+    it "delegates to the api client" do
+      subject.auto_assign_roles
+      expect(api_client).to have_received(:auto_assign_cluster_roles).with(name: subject.name)
+    end
+  end
 end

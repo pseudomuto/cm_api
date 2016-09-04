@@ -88,6 +88,20 @@ module CMAPI
         get("/clusters/#{name}/serviceTypes")
       end
 
+      # Automatically assign roles to hosts and create the roles for all the services in a cluster.
+      # @see http://cloudera.github.io/cm_api/apidocs/v13/path__clusters_-clusterName-_autoAssignRoles.html
+      # @raise [UnsupportedVersionError] when version < 6
+      # @since 6
+      #
+      # @param name [String] the cluster to assign roles for
+      # @return [nil, Error] nil when successful, otherwise the error
+      def auto_assign_cluster_roles(name:)
+        enforce_min_version!(6)
+
+        response = put("/clusters/#{name}/autoAssignRoles")
+        response.blank? ? nil : response
+      end
+
       private
 
       def ensure_valid_version!(version:, full_version:)
