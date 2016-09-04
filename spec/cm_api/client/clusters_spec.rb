@@ -74,48 +74,23 @@ describe CMAPI::Client, :vcr do
     end
   end
 
-  describe "#rename_cluster" do
+  describe "#update_cluster" do
     context "when the cluster exists" do
-      it "updates the name" do
+      it "supports renaming the cluster" do
         APIClient.create_cluster(name: "To Be Updated", full_version: "5.8.1")
         expect(last_response.status).to eq(200)
 
-        response = APIClient.rename_cluster(name: "To Be Updated", new_name: "Updated Cluster")
+        response = APIClient.update_cluster(name: "To Be Updated", new_name: "Updated Cluster")
         expect(last_response.status).to eq(200)
         expect(response).to be_kind_of(CMAPI::Cluster)
         expect(response.display_name).to eq("Updated Cluster")
       end
-    end
 
-    context "when the cluster is not found" do
-      it "returns the error resource" do
-        response = APIClient.rename_cluster(name: "Not here", new_name: "Won't be applied")
-        expect(response).to be_kind_of(CMAPI::Error)
-        expect(response.status).to eq(404)
-        expect(response.message).to_not be_empty
-      end
-    end
-
-    context "when the API version < 2" do
-      it "raises UnsupportedVersionError" do
-        APIClient.create_cluster(name: "Version Test", full_version: "5.8.1")
-        expect(last_response.status).to eq(200)
-
-        client = versioned_api_client(version: 1)
-        expect { client.rename_cluster(name: "Version Test", new_name: "Doesn't Matter") }.to raise_error(
-          CMAPI::UnsupportedVersionError
-        )
-      end
-    end
-  end
-
-  describe "#update_cluster_version" do
-    context "when the cluster exists" do
-      it "updates the version of CDH for the cluster" do
+      it "can update the version of CDH for the cluster" do
         APIClient.create_cluster(name: "Update CDH", full_version: "5.8.0")
         expect(last_response.status).to eq(200)
 
-        response = APIClient.update_cluster_version(name: "Update CDH", full_version: "5.8.1")
+        response = APIClient.update_cluster(name: "Update CDH", full_version: "5.8.1")
         expect(last_response.status).to eq(200)
         expect(response).to be_kind_of(CMAPI::Cluster)
         expect(response.full_version).to eq("5.8.1")
@@ -124,20 +99,17 @@ describe CMAPI::Client, :vcr do
 
     context "when the cluster is not found" do
       it "returns the error resource" do
-        response = APIClient.update_cluster_version(name: "Not here", full_version: "5.8.1")
+        response = APIClient.update_cluster(name: "Not here", new_name: "Won't be applied")
         expect(response).to be_kind_of(CMAPI::Error)
         expect(response.status).to eq(404)
         expect(response.message).to_not be_empty
       end
     end
 
-    context "when the API version < 2" do
+    context "when API version < 2" do
       it "raises UnsupportedVersionError" do
-        APIClient.create_cluster(name: "Update Cluster Version Test", full_version: "5.8.1")
-        expect(last_response.status).to eq(200)
-
         client = versioned_api_client(version: 1)
-        expect { client.rename_cluster(name: "Update Cluster Version Test", new_name: "Meh") }.to raise_error(
+        expect { client.update_cluster(name: "Test", new_name: "Doesn't Matter") }.to raise_error(
           CMAPI::UnsupportedVersionError
         )
       end
