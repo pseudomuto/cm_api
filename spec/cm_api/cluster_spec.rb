@@ -23,4 +23,11 @@ describe CMAPI::Cluster do
       expect(api_client).to have_received(:auto_assign_cluster_roles).with(name: subject.name)
     end
   end
+
+  describe "#auto_configure" do
+    it "delegates to the api client" do
+      subject.auto_configure
+      expect(api_client).to have_received(:auto_configure_cluster).with(name: subject.name)
+    end
+  end
 end

@@ -183,4 +183,29 @@ describe CMAPI::Client, :vcr do
       end
     end
   end
+
+  describe "#auto_configure_cluster" do
+    context "when successful" do
+      it "returns nil" do
+        response = APIClient.auto_configure_cluster(name: "Cloudera QuickStart")
+        expect(response).to be_nil
+      end
+    end
+
+    context "when failure occurs" do
+      it "returns the error" do
+        response = APIClient.auto_configure_cluster(name: "unknown cluster")
+        expect(response).to be_kind_of(CMAPI::Error)
+      end
+    end
+
+    context "when API version < 6" do
+      it "raises UnsupportedVersionError" do
+        client = versioned_api_client(version: 1)
+        expect { client.auto_configure_cluster(name: "Cloudera QuickStart") }.to raise_error(
+          CMAPI::UnsupportedVersionError
+        )
+      end
+    end
+  end
 end

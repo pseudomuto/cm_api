@@ -102,6 +102,20 @@ module CMAPI
         response.blank? ? nil : response
       end
 
+      # Automatically configure roles and services in a cluster.
+      # @see http://cloudera.github.io/cm_api/apidocs/v13/path__clusters_-clusterName-_autoConfigure.html
+      # @raise [UnsupportedVersionError] when version < 6
+      # @since 6
+      #
+      # @param name [String] the cluster to configure
+      # @return [nil, Error] nil when successful, otherwise the error
+      def auto_configure_cluster(name:)
+        enforce_min_version!(6)
+
+        response = put("/clusters/#{name}/autoConfigure")
+        response.blank? ? nil : response
+      end
+
       private
 
       def ensure_valid_version!(version:, full_version:)

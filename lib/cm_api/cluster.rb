@@ -31,5 +31,14 @@ module CMAPI
     def auto_assign_roles
       api_client.auto_assign_cluster_roles(name: name)
     end
+
+    # Automatically configure roles and services in a cluster.
+    # @raise [UnsupportedVersionError] when version < 6
+    # @since 6
+    #
+    # @return [nil, Error] nil when successful, otherwise the error
+    def auto_configure
+      api_client.auto_configure_cluster(name: name)
+    end
   end
 end
