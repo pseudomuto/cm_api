@@ -158,4 +158,97 @@ describe CMAPI::Client, :vcr do
       end
     end
   end
+
+  describe "#auto_assign_cluster_roles" do
+    context "when successful" do
+      it "returns nil" do
+        response = APIClient.auto_assign_cluster_roles(name: "Cloudera QuickStart")
+        expect(api_request("/clusters/Cloudera QuickStart/autoAssignRoles", method: :put)).to have_been_made
+        expect(last_response.status).to eq(204)
+        expect(response).to be_nil
+      end
+    end
+
+    context "when failure occurs" do
+      it "returns the error" do
+        response = APIClient.auto_assign_cluster_roles(name: "unknown cluster")
+        expect(response).to be_kind_of(CMAPI::Error)
+      end
+    end
+
+    context "when API version < 6" do
+      it "raises UnsupportedVersionError" do
+        client = versioned_api_client(version: 1)
+        expect { client.auto_assign_cluster_roles(name: "Cloudera QuickStart") }.to raise_error(
+          CMAPI::UnsupportedVersionError
+        )
+      end
+    end
+  end
+
+  describe "#auto_configure_cluster" do
+    context "when successful" do
+      it "returns nil" do
+        response = APIClient.auto_configure_cluster(name: "Cloudera QuickStart")
+        expect(api_request("/clusters/Cloudera QuickStart/autoConfigure", method: :put)).to have_been_made
+        expect(last_response.status).to eq(204)
+        expect(response).to be_nil
+      end
+    end
+
+    context "when failure occurs" do
+      it "returns the error" do
+        response = APIClient.auto_configure_cluster(name: "unknown cluster")
+        expect(response).to be_kind_of(CMAPI::Error)
+      end
+    end
+
+    context "when API version < 6" do
+      it "raises UnsupportedVersionError" do
+        client = versioned_api_client(version: 1)
+        expect { client.auto_configure_cluster(name: "Cloudera QuickStart") }.to raise_error(
+          CMAPI::UnsupportedVersionError
+        )
+      end
+    end
+  end
+
+  describe "#cluster_dfs_services" do
+    context "when successful" do
+      it "returns an array of DFS services" do
+        response = APIClient.cluster_dfs_services(name: "Cloudera QuickStart")
+        expect(api_request("/clusters/Cloudera QuickStart/dfsServices?view=summary")).to have_been_made
+        expect(last_response.status).to eq(200)
+        expect(response).to be_kind_of(Array)
+        response.each { |service| expect(service).to be_kind_of(CMAPI::Resource) }
+      end
+    end
+
+    context "when cluster unknown" do
+      it "returns an empty array of services" do
+        response = APIClient.cluster_dfs_services(name: "unknown cluster")
+        expect(response).to be_kind_of(Array)
+        expect(response).to be_empty
+      end
+    end
+  end
+
+  describe "#export_cluster" do
+    context "when successful" do
+      it "returns the configuration object" do
+        response = APIClient.export_cluster(name: "Cloudera QuickStart")
+        expect(api_request("/clusters/Cloudera QuickStart/export?autoConfig=false")).to have_been_made
+        expect(last_response.status).to eq(200)
+        expect(response).to be_kind_of(CMAPI::Resource)
+      end
+    end
+
+    context "when an error occurs" do
+      it "returns an error" do
+        response = APIClient.export_cluster(name: "unknown cluster")
+        expect(response).to be_kind_of(CMAPI::Error)
+        expect(response.status).to eq(404)
+      end
+    end
+  end
 end

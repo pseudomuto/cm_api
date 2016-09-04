@@ -88,6 +88,55 @@ module CMAPI
         get("/clusters/#{name}/serviceTypes")
       end
 
+      # Automatically assign roles to hosts and create the roles for all the services in a cluster.
+      # @see http://cloudera.github.io/cm_api/apidocs/v13/path__clusters_-clusterName-_autoAssignRoles.html
+      # @raise [UnsupportedVersionError] when version < 6
+      # @since 6
+      #
+      # @param name [String] the cluster to assign roles for
+      # @return [nil, Error] nil when successful, otherwise the error
+      def auto_assign_cluster_roles(name:)
+        enforce_min_version!(6)
+
+        response = put("/clusters/#{name}/autoAssignRoles")
+        response.blank? ? nil : response
+      end
+
+      # Automatically configure roles and services in a cluster.
+      # @see http://cloudera.github.io/cm_api/apidocs/v13/path__clusters_-clusterName-_autoConfigure.html
+      # @raise [UnsupportedVersionError] when version < 6
+      # @since 6
+      #
+      # @param name [String] the cluster to configure
+      # @return [nil, Error] nil when successful, otherwise the error
+      def auto_configure_cluster(name:)
+        enforce_min_version!(6)
+
+        response = put("/clusters/#{name}/autoConfigure")
+        response.blank? ? nil : response
+      end
+
+      # List the services that can provide distributed file system (DFS) capabilities in a cluster
+      # @see http://cloudera.github.io/cm_api/apidocs/v13/path__clusters_-clusterName-_dfsServices.html
+      #
+      # @param name [String] the cluster to configure
+      # @param view [String] the view to return.
+      #   Valid values are summary (default), full, full_with_health_check_explanation, export, export_redacted
+      # @return [Array<Resource>] the list of services
+      def cluster_dfs_services(name:, view: "summary")
+        get("/clusters/#{name}/dfsServices", view: view)
+      end
+
+      # Export the cluster template for the given cluster
+      # @see http://cloudera.github.io/cm_api/apidocs/v13/path__clusters_-clusterName-_export.html
+      #
+      # @param name [String] the cluster to export
+      # @param auto_config [Boolean] whether or not to export configs set by auto configuration (default: false)
+      # @return [Resource, Error] the configuration for the cluster or an error
+      def export_cluster(name:, auto_config: false)
+        get("/clusters/#{name}/export", autoConfig: auto_config)
+      end
+
       private
 
       def ensure_valid_version!(version:, full_version:)

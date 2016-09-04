@@ -22,5 +22,40 @@ module CMAPI
     def update_version(full_version:)
       api_client.update_cluster(name: name, full_version: full_version)
     end
+
+    # Automatically assign roles to hosts and create the roles for all the services in this cluster.
+    # @raise [UnsupportedVersionError] when version < 6
+    # @since 6
+    #
+    # @return [nil, Error] nil when successful, otherwise the error
+    def auto_assign_roles
+      api_client.auto_assign_cluster_roles(name: name)
+    end
+
+    # Automatically configure roles and services in a cluster.
+    # @raise [UnsupportedVersionError] when version < 6
+    # @since 6
+    #
+    # @return [nil, Error] nil when successful, otherwise the error
+    def auto_configure
+      api_client.auto_configure_cluster(name: name)
+    end
+
+    # List the services that can provide distributed file system (DFS) capabilities in a cluster
+    #
+    # @param view [String] the view to return.
+    #   Valid values are summary (default), full, full_with_health_check_explanation, export, export_redacted
+    # @return [Array<Resource>] the list of services
+    def dfs_services(view: "summary")
+      api_client.cluster_dfs_services(name: name, view: view)
+    end
+
+    # Export the cluster template for this cluster
+    #
+    # @param auto_config [Boolean] whether or not to export configs set by auto configuration (default: false)
+    # @return [Resource, Error] the configuration for the cluster or an error
+    def export(auto_config: false)
+      api_client.export_cluster(name: name, auto_config: auto_config)
+    end
   end
 end
