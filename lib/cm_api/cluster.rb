@@ -40,5 +40,14 @@ module CMAPI
     def auto_configure
       api_client.auto_configure_cluster(name: name)
     end
+
+    # List the services that can provide distributed file system (DFS) capabilities in a cluster
+    #
+    # @param view [String] the view to return.
+    #   Valid values are summary (default), full, full_with_health_check_explanation, export, export_redacted
+    # @return [Array<Resource>] the list of services
+    def dfs_services(view: "summary")
+      api_client.cluster_dfs_services(name: name, view: view)
+    end
   end
 end

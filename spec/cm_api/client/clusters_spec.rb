@@ -208,4 +208,22 @@ describe CMAPI::Client, :vcr do
       end
     end
   end
+
+  describe "#cluster_dfs_services" do
+    context "when successful" do
+      it "returns an array of DFS services" do
+        response = APIClient.cluster_dfs_services(name: "Cloudera QuickStart")
+        expect(response).to be_kind_of(Array)
+        response.each { |service| expect(service).to be_kind_of(CMAPI::Resource) }
+      end
+    end
+
+    context "when cluster unknown" do
+      it "returns an empty array of services" do
+        response = APIClient.cluster_dfs_services(name: "unknown cluster")
+        expect(response).to be_kind_of(Array)
+        expect(response).to be_empty
+      end
+    end
+  end
 end

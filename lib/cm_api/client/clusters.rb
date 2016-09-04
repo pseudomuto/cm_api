@@ -116,6 +116,17 @@ module CMAPI
         response.blank? ? nil : response
       end
 
+      # List the services that can provide distributed file system (DFS) capabilities in a cluster
+      # @see http://cloudera.github.io/cm_api/apidocs/v13/path__clusters_-clusterName-_dfsServices.html
+      #
+      # @param name [String] the cluster to configure
+      # @param view [String] the view to return.
+      #   Valid values are summary (default), full, full_with_health_check_explanation, export, export_redacted
+      # @return [Array<Resource>] the list of services
+      def cluster_dfs_services(name:, view: "summary")
+        get("/clusters/#{name}/dfsServices", view: view)
+      end
+
       private
 
       def ensure_valid_version!(version:, full_version:)

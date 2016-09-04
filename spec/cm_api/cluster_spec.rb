@@ -30,4 +30,11 @@ describe CMAPI::Cluster do
       expect(api_client).to have_received(:auto_configure_cluster).with(name: subject.name)
     end
   end
+
+  describe "#dfs_services" do
+    it "delegates to the api client" do
+      subject.dfs_services(view: "full")
+      expect(api_client).to have_received(:cluster_dfs_services).with(name: subject.name, view: "full")
+    end
+  end
 end
