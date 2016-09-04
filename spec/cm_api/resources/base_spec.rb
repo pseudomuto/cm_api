@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-describe CMAPI::Resources::Base do
+describe CMAPI::Resource do
   let(:subject) { described_class.new(json_fixture("resource.json"), api_client: APIClient) }
 
   it "assigns #api_client recursively" do

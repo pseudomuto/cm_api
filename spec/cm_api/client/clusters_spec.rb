@@ -7,6 +7,7 @@ describe CMAPI::Client, :vcr do
         expect(api_request("/clusters/Cloudera QuickStart")).to have_been_made
         expect(last_response.status).to eq(200)
         expect(response.display_name).to eq("Cloudera QuickStart")
+        expect(response).to be_kind_of(CMAPI::Cluster)
       end
     end
 
@@ -26,6 +27,8 @@ describe CMAPI::Client, :vcr do
       expect(api_request("/clusters?view=summary")).to have_been_made
       expect(last_response.status).to eq(200)
       expect(response[0].display_name).to eq("Cloudera QuickStart")
+
+      response.each { |resource| expect(resource).to be_kind_of(CMAPI::Cluster) }
     end
 
     it "accepts a custom view parameter" do
@@ -33,6 +36,13 @@ describe CMAPI::Client, :vcr do
       expect(api_request("/clusters?view=full")).to have_been_made
       expect(last_response.status).to eq(200)
       expect(response[0].display_name).to eq("Cloudera QuickStart")
+    end
+
+    context "when operation not successful" do
+      it "returns an error object" do
+        response = APIClient.clusters(view: "unknown_type")
+        expect(response).to be_kind_of(CMAPI::Error)
+      end
     end
   end
 
@@ -42,6 +52,7 @@ describe CMAPI::Client, :vcr do
         response = APIClient.create_cluster(name: "New Cluster", full_version: "5.8.1")
         expect(api_request("/clusters", method: :post)).to have_been_made
         expect(last_response.status).to eq(200)
+        expect(response).to be_kind_of(CMAPI::Cluster)
         expect(response.name).to eq("New Cluster")
       end
     end
@@ -56,72 +67,49 @@ describe CMAPI::Client, :vcr do
       it "returns the error resource" do
         response = APIClient.create_cluster(name: nil, full_version: "5.8.1") # name already exists
         expect(api_request("/clusters", method: :post)).to have_been_made
-        expect(last_response.status).to eq(400)
+        expect(response).to be_kind_of(CMAPI::Error)
+        expect(response.status).to eq(400)
         expect(response.message).to_not be_empty
       end
     end
   end
 
-  describe "#rename_cluster" do
+  describe "#update_cluster" do
     context "when the cluster exists" do
-      it "updates the name" do
+      it "supports renaming the cluster" do
         APIClient.create_cluster(name: "To Be Updated", full_version: "5.8.1")
         expect(last_response.status).to eq(200)
 
-        response = APIClient.rename_cluster(name: "To Be Updated", new_name: "Updated Cluster")
+        response = APIClient.update_cluster(name: "To Be Updated", new_name: "Updated Cluster")
         expect(last_response.status).to eq(200)
+        expect(response).to be_kind_of(CMAPI::Cluster)
         expect(response.display_name).to eq("Updated Cluster")
       end
-    end
 
-    context "when the cluster is not found" do
-      it "returns the error resource" do
-        response = APIClient.rename_cluster(name: "Not here", new_name: "Won't be applied")
-        expect(last_response.status).to eq(404)
-        expect(response.message).to_not be_empty
-      end
-    end
-
-    context "when the API version < 2" do
-      it "raises UnsupportedVersionError" do
-        APIClient.create_cluster(name: "Version Test", full_version: "5.8.1")
-        expect(last_response.status).to eq(200)
-
-        client = versioned_api_client(version: 1)
-        expect { client.rename_cluster(name: "Version Test", new_name: "Doesn't Matter") }.to raise_error(
-          CMAPI::UnsupportedVersionError
-        )
-      end
-    end
-  end
-
-  describe "#update_cluster_version" do
-    context "when the cluster exists" do
-      it "updates the version of CDH for the cluster" do
+      it "can update the version of CDH for the cluster" do
         APIClient.create_cluster(name: "Update CDH", full_version: "5.8.0")
         expect(last_response.status).to eq(200)
 
-        response = APIClient.update_cluster_version(name: "Update CDH", full_version: "5.8.1")
+        response = APIClient.update_cluster(name: "Update CDH", full_version: "5.8.1")
         expect(last_response.status).to eq(200)
+        expect(response).to be_kind_of(CMAPI::Cluster)
         expect(response.full_version).to eq("5.8.1")
       end
     end
 
     context "when the cluster is not found" do
       it "returns the error resource" do
-        response = APIClient.update_cluster_version(name: "Not here", full_version: "5.8.1")
-        expect(last_response.status).to eq(404)
+        response = APIClient.update_cluster(name: "Not here", new_name: "Won't be applied")
+        expect(response).to be_kind_of(CMAPI::Error)
+        expect(response.status).to eq(404)
         expect(response.message).to_not be_empty
       end
     end
 
-    context "when the API version < 2" do
+    context "when API version < 2" do
       it "raises UnsupportedVersionError" do
-        APIClient.create_cluster(name: "Update Cluster Version Test", full_version: "5.8.1")
-        expect(last_response.status).to eq(200)
-
         client = versioned_api_client(version: 1)
-        expect { client.rename_cluster(name: "Update Cluster Version Test", new_name: "Meh") }.to raise_error(
+        expect { client.update_cluster(name: "Test", new_name: "Doesn't Matter") }.to raise_error(
           CMAPI::UnsupportedVersionError
         )
       end
@@ -136,6 +124,7 @@ describe CMAPI::Client, :vcr do
 
         response = APIClient.delete_cluster(name: "To Be Deleted")
         expect(last_response.status).to eq(200)
+        expect(response).to be_kind_of(CMAPI::Cluster)
         expect(response.name).to eq("To Be Deleted")
       end
     end
@@ -143,7 +132,8 @@ describe CMAPI::Client, :vcr do
     context "when the cluster is not found" do
       it "returns an appropriate error resource" do
         response = APIClient.delete_cluster(name: "unknown cluster")
-        expect(last_response.status).to eq(404)
+        expect(response).to be_kind_of(CMAPI::Error)
+        expect(response.status).to eq(404)
         expect(response.message).to_not be_empty
       end
     end
@@ -154,6 +144,7 @@ describe CMAPI::Client, :vcr do
       it "deletes the cluster" do
         response = APIClient.cluster_service_types(name: "Cloudera QuickStart")
         expect(last_response.status).to eq(200)
+        expect(response).to be_kind_of(Array)
         expect(response).to include("YARN")
       end
     end
@@ -161,7 +152,8 @@ describe CMAPI::Client, :vcr do
     context "when the cluster is not found" do
       it "returns an appropriate error resource" do
         response = APIClient.cluster_service_types(name: "unknown cluster")
-        expect(last_response.status).to eq(404)
+        expect(response).to be_kind_of(CMAPI::Error)
+        expect(response.status).to eq(404)
         expect(response.message).to_not be_empty
       end
     end
