@@ -128,6 +128,7 @@ module CMAPI
       end
 
       # Export the cluster template for the given cluster
+      # @see http://cloudera.github.io/cm_api/apidocs/v13/path__clusters_-clusterName-_export.html
       #
       # @param name [String] the cluster to export
       # @param auto_config [Boolean] whether or not to export configs set by auto configuration (default: false)
