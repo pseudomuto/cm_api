@@ -52,6 +52,7 @@ module CMAPI
       # Update an existing cluster
       # @see http://cloudera.github.io/cm_api/apidocs/v13/path__clusters_-clusterName-.html
       # @raise [UnsupportedVersionError] when version < 2
+      # @since 2
       #
       # @param name [String] the name of the cluster to update
       # @param new_name [String] the new name for the cluster or `nil` to leave as is

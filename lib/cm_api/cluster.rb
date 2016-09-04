@@ -5,6 +5,7 @@ module CMAPI
   class Cluster < SimpleDelegator
     # Rename this cluster
     # @raise [UnsupportedVersionError] when API version < 2
+    # @since 2
     #
     # @param new_name [String] the new name for this cluster
     # @return [Cluster, Error] the updated cluster or an error
@@ -14,6 +15,7 @@ module CMAPI
 
     # Updates the CDH version for this cluster
     # @raise [UnsupportedVersionError] when API version < 2
+    # @since 2
     #
     # @param full_version [String] the full CDH version to update to (e.g. "5.8.1")
     # @return [Cluster, Error] the updated cluster or an error
